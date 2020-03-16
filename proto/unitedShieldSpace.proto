@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package unitedshieldspace;
+
+service UnitedShieldSpace {
+    rpc RegisterNewUser(NewUserDetails) returns (UserCreationStatus);
+}
+
+message NewUserDetails {
+    string name = 1;
+    string email = 2;
+    string password = 3;
+}
+
+message UserCreationStatus {
+    bool userCreated = 1;
+}
