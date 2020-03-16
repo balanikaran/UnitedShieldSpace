@@ -7,9 +7,10 @@ import (
 	"runtime"
 
 	"github.com/joho/godotenv"
+	"github.com/krnblni/UnitedShieldSpace/server/auth"
+	"github.com/krnblni/UnitedShieldSpace/server/db"
 	"github.com/krnblni/UnitedShieldSpace/server/logger"
 	"github.com/krnblni/UnitedShieldSpace/server/utils"
-	"github.com/krnblni/UnitedShieldSpace/server/db"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -45,6 +46,15 @@ func (u *ussServer) RegisterNewUser(ctx context.Context, newUserDetails *unitedS
 	}
 
 	return &unitedShieldSpace.UserCreationStatus{UserCreated: true}, nil
+}
+
+func (u *ussServer) LoginUser(ctx context.Context, userCredentials *unitedShieldSpace.UserCredentials) (*unitedShieldSpace.LoginResponse, error) {
+	err := utils.ValidateUserCredentials(userCredentials)
+	if err != nil {
+		return &unitedShieldSpace.LoginResponse{LoginStatus: false}, status.Error(codes.InvalidArgument, "Invalid user credentials")
+	}
+
+	return auth.Login(userCredentials)
 }
 
 func main() {

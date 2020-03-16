@@ -10,18 +10,6 @@ import (
 	unitedShieldSpace "github.com/krnblni/UnitedShieldSpace/server/genproto"
 )
 
-// GetCurrentDir - This return the path to this server folder of the project
-// func GetCurrentDir() (string, error) {
-// 	_, fileName, _, ok := runtime.Caller(0)
-// 	fmt.Println(fileName)
-// 	fmt.Println(os.Getwd())
-// 	if !ok {
-// 		return "", errors.New("unable get current file name")
-// 	}
-// 	currentDir := filepath.Dir(fileName)
-// 	return currentDir, nil
-// }
-
 // GetEnvAsString - gets environment value as string
 func GetEnvAsString(key string, defaultValue string) string {
 	if value := os.Getenv(key); value != "" {
@@ -63,6 +51,22 @@ func ValidateNewUserDetails(newUserDetails *unitedShieldSpace.NewUserDetails) (e
 	}
 
 	password := strings.TrimSpace(newUserDetails.GetPassword())
+	if password == "" || len(password) < 8 {
+		return errors.New("Invalid password")
+	}
+
+	return nil
+}
+
+// ValidateUserCredentials - 
+func ValidateUserCredentials(userCredentials *unitedShieldSpace.UserCredentials) (error) {
+	var rxEmail = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
+	email := strings.TrimSpace(userCredentials.GetEmail())
+	if email == "" || !rxEmail.MatchString(email) {
+		return errors.New("Invalid user email")
+	}
+
+	password := strings.TrimSpace(userCredentials.GetPassword())
 	if password == "" || len(password) < 8 {
 		return errors.New("Invalid password")
 	}

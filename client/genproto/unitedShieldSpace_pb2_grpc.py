@@ -19,6 +19,11 @@ class UnitedShieldSpaceStub(object):
         request_serializer=unitedShieldSpace__pb2.NewUserDetails.SerializeToString,
         response_deserializer=unitedShieldSpace__pb2.UserCreationStatus.FromString,
         )
+    self.LoginUser = channel.unary_unary(
+        '/unitedshieldspace.UnitedShieldSpace/LoginUser',
+        request_serializer=unitedShieldSpace__pb2.UserCredentials.SerializeToString,
+        response_deserializer=unitedShieldSpace__pb2.LoginResponse.FromString,
+        )
 
 
 class UnitedShieldSpaceServicer(object):
@@ -32,6 +37,13 @@ class UnitedShieldSpaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def LoginUser(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_UnitedShieldSpaceServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -39,6 +51,11 @@ def add_UnitedShieldSpaceServicer_to_server(servicer, server):
           servicer.RegisterNewUser,
           request_deserializer=unitedShieldSpace__pb2.NewUserDetails.FromString,
           response_serializer=unitedShieldSpace__pb2.UserCreationStatus.SerializeToString,
+      ),
+      'LoginUser': grpc.unary_unary_rpc_method_handler(
+          servicer.LoginUser,
+          request_deserializer=unitedShieldSpace__pb2.UserCredentials.FromString,
+          response_serializer=unitedShieldSpace__pb2.LoginResponse.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

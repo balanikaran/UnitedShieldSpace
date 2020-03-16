@@ -2,7 +2,8 @@ package models
 
 // User - can be directly saved to mongodb database
 type User struct {
-	Name string
-	Email string
-	Password string
+	ID       string `json:"_id" bson:"_id"`
+	Name     string `json:"name" bson:"name"`
+	Email    string `json:"email" bson:"email"`
+	Password string `json:"password" bson:"password"`
 }

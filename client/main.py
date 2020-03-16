@@ -17,6 +17,7 @@ class UnitedShieldSpaceApp(tk.Tk):
 
         # initialization work here
         self.initStatus = AppInit().initialize()
+        print(self.initStatus)
 
         # remove splash screen
         splash.destroy()

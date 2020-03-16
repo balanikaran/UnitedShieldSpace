@@ -8,8 +8,8 @@ class StickyDialog(tk.Toplevel):
         self.minsize(300, 100)
         self.title(None)
         self.resizable(False, False)
-        self.attributes("-topmost", "true")
         self.grab_set()
+        self.overrideredirect(True)
         centerWindow(self, 300, 100)
         tk.Label(self, text=message).pack(expand=True)
 

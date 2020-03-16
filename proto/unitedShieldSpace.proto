@@ -4,6 +4,7 @@ package unitedshieldspace;
 
 service UnitedShieldSpace {
     rpc RegisterNewUser(NewUserDetails) returns (UserCreationStatus);
+    rpc LoginUser(UserCredentials) returns (LoginResponse);
 }
 
 message NewUserDetails {
@@ -14,4 +15,17 @@ message NewUserDetails {
 
 message UserCreationStatus {
     bool userCreated = 1;
+}
+
+message UserCredentials {
+    string email = 1;
+    string password = 2;
+}
+
+message LoginResponse {
+    bool loginStatus = 1;
+    string name = 2;
+    string uid = 3;
+    string accessToken = 4;
+    string refreshToken = 5;
 }

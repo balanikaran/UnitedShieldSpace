@@ -4,6 +4,11 @@ from client.screens.signUpScreen import SignUpScreen
 from client.utils.textUtils import validateEmail
 from client.screens.genericDialog import GenericDialog
 from client.screens.homeScreen import HomeScreen
+from client.communication.auth import UserLogin
+from client.screens.stickyDialog import StickyDialog
+from queue import Queue
+from grpc import StatusCode
+import unitedShieldSpace_pb2 as ussPb
 
 
 class LoginScreen:
@@ -15,6 +20,10 @@ class LoginScreen:
 
         self.email = tk.StringVar()
         self.password = tk.StringVar()
+        self.queue = Queue()
+        self.loginResponse = None
+
+        self.dialog = None
 
         self.root.grid_rowconfigure(0, weight=1)
         self.root.grid_rowconfigure(2, weight=1)
@@ -37,7 +46,7 @@ class LoginScreen:
         self.passwordEntry = tk.Entry(self.frame, textvariable=self.password, show="*")
         self.passwordEntry.grid(row=2, column=1, sticky="E", padx=5, pady=5)
 
-        self.loginButton = tk.Button(self.frame, text="Login", command=self.login)
+        self.loginButton = tk.Button(self.frame, text="Login", command=self.loginInitiator)
         self.loginButton.grid(row=3, column=1, sticky="S", padx=10, pady=10, ipadx=15)
 
         tk.Label(self.frame, text="Don't have an account?").grid(row=4, column=1, sticky="NSWE", padx=5, pady=(20, 0))
@@ -48,7 +57,7 @@ class LoginScreen:
         self.frame.destroy()
         SignUpScreen(self.root)
 
-    def login(self):
+    def loginInitiator(self):
         email = self.email.get()
         password = self.password.get()
         if not validateEmail(email):
@@ -56,5 +65,29 @@ class LoginScreen:
         elif password == "" or len(password) < 8:
             GenericDialog(self.root, title="Validation Error", message="Password must be 8 characters long!")
         else:
-            self.frame.destroy()
-            HomeScreen(self.root)
+            self.dialog = StickyDialog(self.root, message="Please wait!")
+            userLoginThread = UserLogin(self.queue, email=email, password=password)
+            userLoginThread.start()
+            self.root.after(100, self.checkQueue)
+
+    def checkQueue(self):
+        if not self.queue.empty():
+            self.loginResponse = self.queue.get()
+            self.dialog.remove()
+            self.afterLoginResponse()
+        else:
+            self.root.after(100, self.checkQueue)
+
+    def afterLoginResponse(self):
+        if isinstance(self.loginResponse, ussPb.LoginResponse):
+            print(self.loginResponse)
+        elif self.loginResponse == StatusCode.INTERNAL:
+            GenericDialog(self.root, title="Server Error", message="Internal server error!")
+        elif self.loginResponse == StatusCode.NOT_FOUND:
+            GenericDialog(self.root, title="Error", message="User not found!")
+        elif self.loginResponse == StatusCode.FAILED_PRECONDITION:
+            GenericDialog(self.root, title="Validation Error", message="Wrong password!")
+        elif self.loginResponse == StatusCode.UNAVAILABLE:
+            GenericDialog(self.root, title="Internal Error", message="Server not available!")
+        else:
+            GenericDialog(self.root, title="Unknown Error", message="Error code: " + self.loginResponse)

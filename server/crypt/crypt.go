@@ -19,3 +19,9 @@ func GetHashedString(plainString string) (string, error) {
 	}
 	return string(hashedString), nil
 }
+
+// VerifyPassword - 
+func VerifyPassword(hashedPassword string, inputPassword string) error {
+	inputPassword = strings.TrimSpace(inputPassword)
+	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(inputPassword))
+}

@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='unitedshieldspace',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x17unitedShieldSpace.proto\x12\x11unitedshieldspace\"?\n\x0eNewUserDetails\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\")\n\x12UserCreationStatus\x12\x13\n\x0buserCreated\x18\x01 \x01(\x08\x32p\n\x11UnitedShieldSpace\x12[\n\x0fRegisterNewUser\x12!.unitedshieldspace.NewUserDetails\x1a%.unitedshieldspace.UserCreationStatusb\x06proto3'
+  serialized_pb=b'\n\x17unitedShieldSpace.proto\x12\x11unitedshieldspace\"?\n\x0eNewUserDetails\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\")\n\x12UserCreationStatus\x12\x13\n\x0buserCreated\x18\x01 \x01(\x08\"2\n\x0fUserCredentials\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"j\n\rLoginResponse\x12\x13\n\x0bloginStatus\x18\x01 \x01(\x08\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0b\n\x03uid\x18\x03 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x04 \x01(\t\x12\x14\n\x0crefreshToken\x18\x05 \x01(\t2\xc3\x01\n\x11UnitedShieldSpace\x12[\n\x0fRegisterNewUser\x12!.unitedshieldspace.NewUserDetails\x1a%.unitedshieldspace.UserCreationStatus\x12Q\n\tLoginUser\x12\".unitedshieldspace.UserCredentials\x1a .unitedshieldspace.LoginResponseb\x06proto3'
 )
 
 
@@ -99,8 +99,107 @@ _USERCREATIONSTATUS = _descriptor.Descriptor(
   serialized_end=152,
 )
 
+
+_USERCREDENTIALS = _descriptor.Descriptor(
+  name='UserCredentials',
+  full_name='unitedshieldspace.UserCredentials',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='email', full_name='unitedshieldspace.UserCredentials.email', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='password', full_name='unitedshieldspace.UserCredentials.password', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=154,
+  serialized_end=204,
+)
+
+
+_LOGINRESPONSE = _descriptor.Descriptor(
+  name='LoginResponse',
+  full_name='unitedshieldspace.LoginResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='loginStatus', full_name='unitedshieldspace.LoginResponse.loginStatus', index=0,
+      number=1, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='unitedshieldspace.LoginResponse.name', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='uid', full_name='unitedshieldspace.LoginResponse.uid', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='accessToken', full_name='unitedshieldspace.LoginResponse.accessToken', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='refreshToken', full_name='unitedshieldspace.LoginResponse.refreshToken', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=206,
+  serialized_end=312,
+)
+
 DESCRIPTOR.message_types_by_name['NewUserDetails'] = _NEWUSERDETAILS
 DESCRIPTOR.message_types_by_name['UserCreationStatus'] = _USERCREATIONSTATUS
+DESCRIPTOR.message_types_by_name['UserCredentials'] = _USERCREDENTIALS
+DESCRIPTOR.message_types_by_name['LoginResponse'] = _LOGINRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 NewUserDetails = _reflection.GeneratedProtocolMessageType('NewUserDetails', (_message.Message,), {
@@ -117,6 +216,20 @@ UserCreationStatus = _reflection.GeneratedProtocolMessageType('UserCreationStatu
   })
 _sym_db.RegisterMessage(UserCreationStatus)
 
+UserCredentials = _reflection.GeneratedProtocolMessageType('UserCredentials', (_message.Message,), {
+  'DESCRIPTOR' : _USERCREDENTIALS,
+  '__module__' : 'unitedShieldSpace_pb2'
+  # @@protoc_insertion_point(class_scope:unitedshieldspace.UserCredentials)
+  })
+_sym_db.RegisterMessage(UserCredentials)
+
+LoginResponse = _reflection.GeneratedProtocolMessageType('LoginResponse', (_message.Message,), {
+  'DESCRIPTOR' : _LOGINRESPONSE,
+  '__module__' : 'unitedShieldSpace_pb2'
+  # @@protoc_insertion_point(class_scope:unitedshieldspace.LoginResponse)
+  })
+_sym_db.RegisterMessage(LoginResponse)
+
 
 
 _UNITEDSHIELDSPACE = _descriptor.ServiceDescriptor(
@@ -125,8 +238,8 @@ _UNITEDSHIELDSPACE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=154,
-  serialized_end=266,
+  serialized_start=315,
+  serialized_end=510,
   methods=[
   _descriptor.MethodDescriptor(
     name='RegisterNewUser',
@@ -135,6 +248,15 @@ _UNITEDSHIELDSPACE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_NEWUSERDETAILS,
     output_type=_USERCREATIONSTATUS,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='LoginUser',
+    full_name='unitedshieldspace.UnitedShieldSpace.LoginUser',
+    index=1,
+    containing_service=None,
+    input_type=_USERCREDENTIALS,
+    output_type=_LOGINRESPONSE,
     serialized_options=None,
   ),
 ])

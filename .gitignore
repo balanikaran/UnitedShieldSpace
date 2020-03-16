@@ -169,3 +169,6 @@ static
 # PyCharm files
 .idea
 .idea/*
+
+# Trial go files
+trial.go

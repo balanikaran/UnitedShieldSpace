@@ -10,6 +10,7 @@ import (
 	"github.com/krnblni/UnitedShieldSpace/server/logger"
 	"github.com/krnblni/UnitedShieldSpace/server/models"
 	"github.com/krnblni/UnitedShieldSpace/server/utils"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"google.golang.org/grpc/codes"
@@ -25,7 +26,7 @@ func getMongoDbURI() string {
 
 func getMongoClient() (*mongo.Client, error) {
 	// create mongo db context
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// create mongodb client
@@ -37,6 +38,7 @@ func getMongoClient() (*mongo.Client, error) {
 
 	err = client.Ping(ctx, nil)
 	if err != nil {
+		ussLogger.Println(err)
 		return nil, err
 	}
 
@@ -46,6 +48,7 @@ func getMongoClient() (*mongo.Client, error) {
 func getUsersDbCollection() (*mongo.Collection, error) {
 	client, err := getMongoClient()
 	if err != nil {
+		ussLogger.Println(err)
 		return nil, err
 	}
 
@@ -57,8 +60,8 @@ func getUsersDbCollection() (*mongo.Collection, error) {
 	return userDb, nil
 }
 
-// CreateNewUser - 
-func CreateNewUser(newUserDetails *unitedShieldSpace.NewUserDetails) (error) {
+// CreateNewUser -
+func CreateNewUser(newUserDetails *unitedShieldSpace.NewUserDetails) error {
 	userDb, err := getUsersDbCollection()
 	if err != nil {
 		ussLogger.Println("unable to get db collection", err)
@@ -72,19 +75,19 @@ func CreateNewUser(newUserDetails *unitedShieldSpace.NewUserDetails) (error) {
 	}
 
 	user := &models.User{
-		Name: newUserDetails.GetName(),
-		Email: newUserDetails.GetEmail(),
+		Name:     newUserDetails.GetName(),
+		Email:    newUserDetails.GetEmail(),
 		Password: userPasswordHash,
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// add user to database collection
 	result, err := userDb.InsertOne(ctx, user)
 	if err != nil {
 		mongoErr := err.(mongo.WriteException)
-		if mongoErr.WriteErrors[0].Code == 11000{
+		if mongoErr.WriteErrors[0].Code == 11000 {
 			ussLogger.Println("user already exists", err)
 			return status.Error(codes.AlreadyExists, "user already exists")
 		}
@@ -94,4 +97,27 @@ func CreateNewUser(newUserDetails *unitedShieldSpace.NewUserDetails) (error) {
 
 	ussLogger.Println("Added a new user. ResultID: ", result.InsertedID)
 	return nil
+}
+
+// FetchUserByEmail -
+func FetchUserByEmail(email string) (models.User, error) {
+	ussLogger.Println("Email: ", email)
+	userDb, err := getUsersDbCollection()
+	if err != nil {
+		ussLogger.Println("unable to get db collection", err)
+		return models.User{}, status.Error(codes.Internal, "internal server error")
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	// get user
+	var result models.User
+	err = userDb.FindOne(ctx, bson.M{"email": email}).Decode(&result)
+	if err != nil {
+		ussLogger.Println(err)
+		return models.User{}, err
+	}
+
+	return result, nil
 }

@@ -79,16 +79,16 @@ class SignUpScreen:
             statusCode = userSignUp(username=name, email=email, password=password)
             if statusCode == StatusCode.OK:
                 print("user created")
-                GenericDialog(self.root, title="Success!", message="User account created.\nYou can now login!")
+                GenericDialog(self.root, title="Success", message="User account created.\nYou can now login!")
             elif statusCode == StatusCode.ALREADY_EXISTS:
                 print("user already exist")
-                GenericDialog(self.root, title="Account Error!", message="User account already exists.\nPlease login!")
+                GenericDialog(self.root, title="Account Error", message="User account already exists.\nPlease login!")
             elif statusCode == StatusCode.INTERNAL:
                 print("internal server error")
-                GenericDialog(self.root, title="Error!", message="Internal Server Error!")
+                GenericDialog(self.root, title="Error", message="Internal Server Error!")
             elif statusCode == StatusCode.UNAVAILABLE:
                 print("server unavailable")
-                GenericDialog(self.root, title="Error!", message="Could not connect to server!")
+                GenericDialog(self.root, title="Error", message="Could not connect to server!")
             else:
                 print("error status code = " + statusCode)
-                GenericDialog(self.root, title="Error!", message="Error Code: " + statusCode)
+                GenericDialog(self.root, title="Unknown Error", message="Error Code: " + statusCode + "!")
