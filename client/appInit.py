@@ -1,5 +1,4 @@
 import concurrent.futures
-import time
 from client.db.initDb import initDatabase
 
 

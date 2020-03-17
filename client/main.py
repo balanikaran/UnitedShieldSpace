@@ -8,7 +8,6 @@ from client.appInit import AppInit
 class UnitedShieldSpaceApp(tk.Tk):
     def __init__(self):
         super().__init__()
-
         # remove window for SplashScreen
         self.withdraw()
 
@@ -17,7 +16,6 @@ class UnitedShieldSpaceApp(tk.Tk):
 
         # initialization work here
         self.initStatus = AppInit().initialize()
-        print(self.initStatus)
 
         # remove splash screen
         splash.destroy()
@@ -25,11 +23,10 @@ class UnitedShieldSpaceApp(tk.Tk):
         if self.initStatus:
             # move to login screen
             LoginScreen(self)
+            self.deiconify()
         else:
             # show App init error screen and exit
-            AppInitErrorScreen(self)
-
-        self.deiconify()
+            AppInitErrorScreen()
 
 
 if __name__ == '__main__':

@@ -2,7 +2,7 @@ import grpc
 import os
 import sys
 from threading import Thread
-
+from queue import Queue
 
 # Get the current directory
 currentDir = os.path.dirname(os.path.realpath(__file__))
@@ -17,7 +17,7 @@ serverPort = "7000"
 
 
 class UserLogin(Thread):
-    def __init__(self, queue, email, password, *args, **kwargs):
+    def __init__(self, queue: Queue, email, password, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.queue = queue
         self.email = email
@@ -34,13 +34,21 @@ class UserLogin(Thread):
             self.queue.put(rpcError.code())
 
 
-def userSignUp(username, email, password):
-    channel = grpc.insecure_channel(serverAddress + ":" + serverPort)
-    stub = unitedShieldSpace.UnitedShieldSpaceStub(channel)
-    try:
-        signUpResponse = stub.RegisterNewUser(ussPb.NewUserDetails(name=username, email=email, password=password))
-        if signUpResponse.userCreated:
-            return grpc.StatusCode.OK
-    except grpc.RpcError as rpcError:
-        # print(rpcError.details())
-        return rpcError.code()
+class UserSignUp(Thread):
+    def __init__(self, queue: Queue, username, email, password, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.queue = queue
+        self.username = username
+        self.email = email
+        self.password = password
+
+    def run(self):
+        channel = grpc.insecure_channel(serverAddress + ":" + serverPort)
+        stub = unitedShieldSpace.UnitedShieldSpaceStub(channel)
+        try:
+            signUpResponse = stub.RegisterNewUser(
+                ussPb.NewUserDetails(name=self.username, email=self.email, password=self.password))
+            if signUpResponse.userCreated:
+                self.queue.put(grpc.StatusCode.OK)
+        except grpc.RpcError as rpcError:
+            self.queue.put(rpcError.code())

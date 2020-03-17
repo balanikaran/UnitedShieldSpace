@@ -3,12 +3,13 @@ import client.screens.loginScreen as loginscreen
 from client.utils.textUtils import validateEmail, validateUsername
 from client.screens.genericDialog import GenericDialog
 from client.screens.stickyDialog import StickyDialog
-from client.communication.auth import userSignUp
+from client.communication.auth import UserSignUp
 from grpc import StatusCode
+from queue import Queue
 
 
 class SignUpScreen:
-    def __init__(self, master=None):
+    def __init__(self, master: tk.Tk):
         self.root = master
         self.root.title("Sign Up")
 
@@ -16,6 +17,11 @@ class SignUpScreen:
         self.email = tk.StringVar()
         self.password = tk.StringVar()
         self.confirmPassword = tk.StringVar()
+        self.queue = Queue()
+
+        self.signUpResponse = None
+
+        self.waitDialog = None
 
         self.root.grid_rowconfigure(0, weight=1)
         self.root.grid_rowconfigure(2, weight=1)
@@ -46,7 +52,7 @@ class SignUpScreen:
         self.confirmPasswordEntry = tk.Entry(self.frame, textvariable=self.confirmPassword, show="*")
         self.confirmPasswordEntry.grid(row=4, column=1, sticky="E", padx=5, pady=5)
 
-        self.signUpButton = tk.Button(self.frame, text="Sign Up", command=self.signUp)
+        self.signUpButton = tk.Button(self.frame, text="Sign Up", command=self.signUpInitiator)
         self.signUpButton.grid(row=5, column=1, sticky="S", padx=10, pady=10, ipadx=15)
 
         tk.Label(self.frame, text="Already have an account?").grid(row=6, column=1, sticky="NSWE", padx=5, pady=(20, 0))
@@ -57,7 +63,7 @@ class SignUpScreen:
         self.frame.destroy()
         loginscreen.LoginScreen(self.root)
 
-    def signUp(self):
+    def signUpInitiator(self):
         name = self.username.get()
         email = self.email.get()
         password = self.password.get()
@@ -76,19 +82,27 @@ class SignUpScreen:
             GenericDialog(self.root, title="Validation Error", message="Password maximum length: 64")
         else:
             # initiate sign up
-            statusCode = userSignUp(username=name, email=email, password=password)
-            if statusCode == StatusCode.OK:
-                print("user created")
-                GenericDialog(self.root, title="Success", message="User account created.\nYou can now login!")
-            elif statusCode == StatusCode.ALREADY_EXISTS:
-                print("user already exist")
-                GenericDialog(self.root, title="Account Error", message="User account already exists.\nPlease login!")
-            elif statusCode == StatusCode.INTERNAL:
-                print("internal server error")
-                GenericDialog(self.root, title="Error", message="Internal Server Error!")
-            elif statusCode == StatusCode.UNAVAILABLE:
-                print("server unavailable")
-                GenericDialog(self.root, title="Error", message="Could not connect to server!")
-            else:
-                print("error status code = " + statusCode)
-                GenericDialog(self.root, title="Unknown Error", message="Error Code: " + statusCode + "!")
+            self.waitDialog = StickyDialog(self.root, message="Please wait!")
+            userSignUpThread = UserSignUp(queue=self.queue, username=name, email=email, password=password)
+            userSignUpThread.start()
+            self.root.after(100, self.checkQueue)
+
+    def checkQueue(self):
+        if not self.queue.empty():
+            self.signUpResponse = self.queue.get()
+            self.waitDialog.remove()
+            self.afterSignUpResponse()
+        else:
+            self.root.after(100, self.checkQueue)
+
+    def afterSignUpResponse(self):
+        if self.signUpResponse == StatusCode.OK:
+            GenericDialog(self.root, title="Success", message="User account created.\nYou can now login!")
+        elif self.signUpResponse == StatusCode.ALREADY_EXISTS:
+            GenericDialog(self.root, title="Account Error", message="User account already exists.\nPlease login!")
+        elif self.signUpResponse == StatusCode.INTERNAL:
+            GenericDialog(self.root, title="Error", message="Internal Server Error!")
+        elif self.signUpResponse == StatusCode.UNAVAILABLE:
+            GenericDialog(self.root, title="Error", message="Could not connect to server!")
+        else:
+            GenericDialog(self.root, title="Unknown Error", message="Error Code: " + self.signUpResponse + "!")

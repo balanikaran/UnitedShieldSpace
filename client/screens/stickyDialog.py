@@ -3,7 +3,7 @@ from client.utils.windowUtils import centerWindow
 
 
 class StickyDialog(tk.Toplevel):
-    def __init__(self, master=None, message="Error message"):
+    def __init__(self, master: tk.Tk, message="Error message"):
         super().__init__(master)
         self.minsize(300, 100)
         self.title(None)

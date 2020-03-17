@@ -9,28 +9,37 @@ from client.screens.stickyDialog import StickyDialog
 from queue import Queue
 from grpc import StatusCode
 import unitedShieldSpace_pb2 as ussPb
+from client.db.dbOperations import SaveUserLoginInfo, CheckDbLoginStatus
+from client.models.user import User
 
 
 class LoginScreen:
-    def __init__(self, master=None):
+    def __init__(self, master: tk.Tk):
         # TODO check if user is already logged-in here
-        self.root = master
-        self.root.title("Login")
-        centerWindow(self.root, 800, 600)
+        if CheckDbLoginStatus().check():
+            HomeScreen(master=master)
+        else:
+            self.root = master
+            self.root.title("Login")
+            centerWindow(self.root, 800, 600)
 
-        self.email = tk.StringVar()
-        self.password = tk.StringVar()
-        self.queue = Queue()
-        self.loginResponse = None
+            self.email = tk.StringVar()
+            self.password = tk.StringVar()
+            self.queue = Queue()
 
-        self.dialog = None
+            self.loginResponse = None
+            self.dbWriteResponse = None
+            self.emailStr = ""
+            self.passwordStr = ""
 
-        self.root.grid_rowconfigure(0, weight=1)
-        self.root.grid_rowconfigure(2, weight=1)
-        self.root.grid_columnconfigure(0, weight=1)
-        self.root.grid_columnconfigure(2, weight=1)
+            self.waitDialog = None
 
-        self.initLoginScreen()
+            self.root.grid_rowconfigure(0, weight=1)
+            self.root.grid_rowconfigure(2, weight=1)
+            self.root.grid_columnconfigure(0, weight=1)
+            self.root.grid_columnconfigure(2, weight=1)
+
+            self.initLoginScreen()
 
     def initLoginScreen(self):
         self.frame = tk.Frame(self.root)
@@ -58,29 +67,30 @@ class LoginScreen:
         SignUpScreen(self.root)
 
     def loginInitiator(self):
-        email = self.email.get()
-        password = self.password.get()
-        if not validateEmail(email):
+        self.emailStr = self.email.get()
+        self.passwordStr = self.password.get()
+        if not validateEmail(self.emailStr):
             GenericDialog(self.root, title="Validation Error", message="Invalid Email Address!")
-        elif password == "" or len(password) < 8:
+        elif self.passwordStr == "" or len(self.passwordStr) < 8:
             GenericDialog(self.root, title="Validation Error", message="Password must be 8 characters long!")
         else:
-            self.dialog = StickyDialog(self.root, message="Please wait!")
-            userLoginThread = UserLogin(self.queue, email=email, password=password)
+            self.waitDialog = StickyDialog(self.root, message="Please wait!")
+            userLoginThread = UserLogin(self.queue, email=self.emailStr, password=self.passwordStr)
             userLoginThread.start()
-            self.root.after(100, self.checkQueue)
+            self.root.after(100, self.checkQueueForLogin)
 
-    def checkQueue(self):
+    def checkQueueForLogin(self):
         if not self.queue.empty():
             self.loginResponse = self.queue.get()
-            self.dialog.remove()
+            self.waitDialog.remove()
             self.afterLoginResponse()
         else:
-            self.root.after(100, self.checkQueue)
+            self.root.after(100, self.checkQueueForLogin)
 
     def afterLoginResponse(self):
         if isinstance(self.loginResponse, ussPb.LoginResponse):
-            print(self.loginResponse)
+            # print(self.loginResponse)
+            self.saveUserInfoInitiator()
         elif self.loginResponse == StatusCode.INTERNAL:
             GenericDialog(self.root, title="Server Error", message="Internal server error!")
         elif self.loginResponse == StatusCode.NOT_FOUND:
@@ -91,3 +101,29 @@ class LoginScreen:
             GenericDialog(self.root, title="Internal Error", message="Server not available!")
         else:
             GenericDialog(self.root, title="Unknown Error", message="Error code: " + self.loginResponse)
+
+    def saveUserInfoInitiator(self):
+        self.waitDialog = StickyDialog(self.root, message="Initializing...\nPlease wait!")
+        user = User(userId=self.loginResponse.uid, name=self.loginResponse.name, email=self.emailStr)
+        self.queue = Queue()
+        saveUserInfoThread = SaveUserLoginInfo(self.queue, user=user, accJwt=self.loginResponse.accessToken,
+                                               refJwt=self.loginResponse.refreshToken)
+        saveUserInfoThread.start()
+        self.root.after(100, self.checkQueueForDb)
+
+    def checkQueueForDb(self):
+        if not self.queue.empty():
+            self.dbWriteResponse = self.queue.get()
+            self.waitDialog.remove()
+            self.afterDbResponse()
+        else:
+            self.root.after(100, self.checkQueueForDb)
+
+    def afterDbResponse(self):
+        if self.dbWriteResponse:
+            self.frame.destroy()
+            HomeScreen(self.root)
+        else:
+            GenericDialog(self.root, title="Database Error!",
+                          message="Unable to save login info!\nProgram will exit now.")
+            self.root.quit()
