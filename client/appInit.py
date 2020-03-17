@@ -14,3 +14,4 @@ class AppInit:
     def __initWork():
         print("Some init work, waiting for 5 seconds...")
         return initDatabase()
+        # return False

@@ -6,21 +6,23 @@ from client.screens.stickyDialog import StickyDialog
 from client.communication.auth import UserSignUp
 from grpc import StatusCode
 from queue import Queue
+from client.utils.windowUtils import centerWindow
 
 
 class SignUpScreen:
     def __init__(self, master: tk.Tk):
         self.root = master
         self.root.title("Sign Up")
+        centerWindow(self.root, 800, 600)
+        self.root.config(menu=tk.Menu(self.root))
 
         self.username = tk.StringVar()
         self.email = tk.StringVar()
         self.password = tk.StringVar()
         self.confirmPassword = tk.StringVar()
+
         self.queue = Queue()
-
         self.signUpResponse = None
-
         self.waitDialog = None
 
         self.root.grid_rowconfigure(0, weight=1)

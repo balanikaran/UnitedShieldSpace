@@ -22,6 +22,7 @@ class LoginScreen:
             self.root = master
             self.root.title("Login")
             centerWindow(self.root, 800, 600)
+            self.root.config(menu=tk.Menu(self.root))
 
             self.email = tk.StringVar()
             self.password = tk.StringVar()

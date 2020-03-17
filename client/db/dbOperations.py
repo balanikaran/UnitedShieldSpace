@@ -73,3 +73,32 @@ class CheckDbLoginStatus:
             return False
         finally:
             dbConnection.close()
+
+
+class RemoveUserLoginInfo:
+    @staticmethod
+    def remove():
+        dbConnection = None
+        try:
+            currentDir = os.path.dirname(os.path.realpath(__file__))
+            dbConnection = sqlite3.connect(currentDir + "/UssClientDatabase.db")
+
+            dbCursor = dbConnection.cursor()
+
+            # because user is now logged out, we well also make the
+            # login status in loginstatus table to 0 (false)
+            updateStatusQuery = '''INSERT OR REPLACE INTO loginstatus (id, islogin) VALUES (1, 0)'''
+            dbCursor.execute(updateStatusQuery)
+
+            # because user is now logged out, we will also remove/null the tokens
+            # access and refresh tokens of the user to the auth table
+            removeAuthQuery = '''INSERT OR REPLACE INTO auth (id, accjwt, refjwt) VALUES (?, ?, ?)'''
+            dbCursor.execute(removeAuthQuery, (1, "NULL", "NULL"))
+
+            dbConnection.commit()
+            return True
+        except sqlite3.Error as error:
+            print(error)
+            return False
+        finally:
+            dbConnection.close()

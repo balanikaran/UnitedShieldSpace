@@ -8,6 +8,7 @@ from client.appInit import AppInit
 class UnitedShieldSpaceApp(tk.Tk):
     def __init__(self):
         super().__init__()
+
         # remove window for SplashScreen
         self.withdraw()
 
