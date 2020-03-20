@@ -7,6 +7,7 @@ from client.communication.auth import UserSignUp
 from grpc import StatusCode
 from queue import Queue
 from client.utils.windowUtils import centerWindow
+from client.utils.getAppLogo import getLogo
 
 
 class SignUpScreen:
@@ -25,41 +26,43 @@ class SignUpScreen:
         self.signUpResponse = None
         self.waitDialog = None
 
-        self.root.grid_rowconfigure(0, weight=1)
-        self.root.grid_rowconfigure(2, weight=1)
-        self.root.grid_columnconfigure(0, weight=1)
-        self.root.grid_columnconfigure(0, weight=1)
-
         self.initSignUpScreen()
 
     def initSignUpScreen(self):
         self.frame = tk.Frame(self.root)
-        self.frame.grid(row=1, column=1)
+        self.frame.pack(expand=True, anchor=tk.CENTER)
 
-        tk.Label(self.frame, text="Create a new account!").grid(row=0, column=1, sticky="NSWE", padx=5, pady=5)
+        self.logo = getLogo()
+        self.logoLabel = tk.Label(self.frame, image=self.logo)
+        self.logoLabel.image = self.logo
+        self.logoLabel.pack(expand=True, padx=30, pady=30)
 
-        tk.Label(self.frame, text="Name").grid(row=1, column=0, sticky="W", padx=5, pady=5)
-        self.usernameEntry = tk.Entry(self.frame, textvariable=self.username)
-        self.usernameEntry.grid(row=1, column=1, sticky="E", padx=5, pady=5)
+        tk.Label(self.frame, text="Create a new account!").pack(expand=True, padx=5, pady=5)
 
-        tk.Label(self.frame, text="Email").grid(row=2, column=0, sticky="W", padx=5, pady=5)
-        self.emailEntry = tk.Entry(self.frame, textvariable=self.email)
-        self.emailEntry.grid(row=2, column=1, sticky="E", padx=5, pady=5)
+        self.nameFrame = tk.Frame(self.frame)
+        self.nameFrame.pack(side=tk.TOP)
+        tk.Label(self.nameFrame, text="Name", padx=38).pack(side=tk.LEFT, expand=True)
+        tk.Entry(self.nameFrame, textvariable=self.username).pack(side=tk.RIGHT, fill=tk.X, expand=True)
 
-        tk.Label(self.frame, text="Password").grid(row=3, column=0, sticky="W", padx=5, pady=5)
-        self.passwordEntry = tk.Entry(self.frame, textvariable=self.password, show="*")
-        self.passwordEntry.grid(row=3, column=1, sticky="E", padx=5, pady=5)
+        self.emailFrame = tk.Frame(self.frame)
+        self.emailFrame.pack(side=tk.TOP)
+        tk.Label(self.emailFrame, text="Email", padx=40).pack(side=tk.LEFT, expand=True)
+        tk.Entry(self.emailFrame, textvariable=self.email).pack(side=tk.RIGHT, fill=tk.X, expand=True)
 
-        tk.Label(self.frame, text="Confirm Password").grid(row=4, column=0, sticky="W", padx=5, pady=5)
-        self.confirmPasswordEntry = tk.Entry(self.frame, textvariable=self.confirmPassword, show="*")
-        self.confirmPasswordEntry.grid(row=4, column=1, sticky="E", padx=5, pady=5)
+        self.passwordFrame = tk.Frame(self.frame)
+        self.passwordFrame.pack(side=tk.TOP)
+        tk.Label(self.passwordFrame, text="Password", padx=26).pack(side=tk.LEFT, expand=True)
+        tk.Entry(self.passwordFrame, textvariable=self.password, show="*").pack(side=tk.RIGHT, fill=tk.X, expand=True)
 
-        self.signUpButton = tk.Button(self.frame, text="Sign Up", command=self.signUpInitiator)
-        self.signUpButton.grid(row=5, column=1, sticky="S", padx=10, pady=10, ipadx=15)
+        self.confirmPasswordFrame = tk.Frame(self.frame)
+        self.confirmPasswordFrame.pack(side=tk.TOP)
+        tk.Label(self.confirmPasswordFrame, text="Confirm Password").pack(side=tk.LEFT, expand=True)
+        tk.Entry(self.confirmPasswordFrame, textvariable=self.confirmPassword, show="*").pack(side=tk.RIGHT, fill=tk.X, expand=True)
 
-        tk.Label(self.frame, text="Already have an account?").grid(row=6, column=1, sticky="NSWE", padx=5, pady=(20, 0))
-        self.loginButton = tk.Button(self.frame, text="Login Now", command=self.launchLoginScreen)
-        self.loginButton.grid(row=7, column=1, sticky="S", padx=10, pady=5, ipadx=15)
+        tk.Button(self.frame, text="Sign Up", command=self.signUpInitiator).pack(expand=True, padx=15, pady=15, ipadx=15)
+
+        tk.Label(self.frame, text="Already have an account?").pack(expand=True, side=tk.TOP, padx=20, pady=(35, 10))
+        tk.Button(self.frame, text="Login Now", command=self.launchLoginScreen).pack(expand=True, side=tk.TOP, ipadx=15)
 
     def launchLoginScreen(self):
         self.frame.destroy()

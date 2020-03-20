@@ -175,3 +175,6 @@ trial.go
 
 # database files
 *.db
+
+# firebase private key
+united-shield-space-firebase-adminsdk-39r2e-a08122e1fa.json

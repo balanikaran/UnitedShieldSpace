@@ -9,15 +9,18 @@ from client.screens.stickyDialog import StickyDialog
 from queue import Queue
 from grpc import StatusCode
 import unitedShieldSpace_pb2 as ussPb
-from client.db.dbOperations import SaveUserLoginInfo, CheckDbLoginStatus
+from client.db.dbOperations import SaveUserLoginInfo, CheckDbLoginStatus, GetUser
 from client.models.user import User
+from client.utils.getAppLogo import getLogo
 
 
 class LoginScreen:
     def __init__(self, master: tk.Tk):
         # TODO check if user is already logged-in here
         if CheckDbLoginStatus().check():
-            HomeScreen(master=master)
+            user = GetUser().get()
+            if user != None:
+                HomeScreen(master=master, user=user)
         else:
             self.root = master
             self.root.title("Login")
@@ -35,33 +38,33 @@ class LoginScreen:
 
             self.waitDialog = None
 
-            self.root.grid_rowconfigure(0, weight=1)
-            self.root.grid_rowconfigure(2, weight=1)
-            self.root.grid_columnconfigure(0, weight=1)
-            self.root.grid_columnconfigure(2, weight=1)
-
             self.initLoginScreen()
 
     def initLoginScreen(self):
         self.frame = tk.Frame(self.root)
-        self.frame.grid(row=1, column=1)
+        self.frame.pack(expand=True, anchor=tk.CENTER)
 
-        tk.Label(self.frame, text="Please Login to continue...").grid(row=0, column=1, sticky="NSWE", padx=5, pady=5)
+        self.logo = getLogo()
+        self.logoLabel = tk.Label(self.frame, image=self.logo)
+        self.logoLabel.image = self.logo
+        self.logoLabel.pack(expand=True, padx=30, pady=30)
 
-        tk.Label(self.frame, text="Email").grid(row=1, column=0, sticky="W", padx=5, pady=5)
-        self.emailEntry = tk.Entry(self.frame, textvariable=self.email)
-        self.emailEntry.grid(row=1, column=1, sticky="E", padx=5, pady=5)
+        tk.Label(self.frame, text="Please Login to continue!").pack(expand=True, padx=15, pady=15)
 
-        tk.Label(self.frame, text="Password").grid(row=2, column=0, sticky="W", padx=5, pady=5)
-        self.passwordEntry = tk.Entry(self.frame, textvariable=self.password, show="*")
-        self.passwordEntry.grid(row=2, column=1, sticky="E", padx=5, pady=5)
+        self.emailFrame = tk.Frame(self.frame)
+        self.emailFrame.pack(side=tk.TOP)
+        tk.Label(master=self.emailFrame, text="Email", padx=15).pack(side=tk.LEFT, expand=True)
+        tk.Entry(self.emailFrame, textvariable=self.email).pack(side=tk.RIGHT, fill=tk.X, expand=True)
 
-        self.loginButton = tk.Button(self.frame, text="Login", command=self.loginInitiator)
-        self.loginButton.grid(row=3, column=1, sticky="S", padx=10, pady=10, ipadx=15)
+        self.passwordFrame = tk.Frame(self.frame)
+        self.passwordFrame.pack(side=tk.TOP)
+        tk.Label(self.passwordFrame, text="Password").pack(side=tk.LEFT)
+        tk.Entry(self.passwordFrame, textvariable=self.password, show="*").pack(side=tk.RIGHT, fill=tk.X, expand=True)
 
-        tk.Label(self.frame, text="Don't have an account?").grid(row=4, column=1, sticky="NSWE", padx=5, pady=(20, 0))
-        self.signUpButton = tk.Button(self.frame, text="Create a new account", command=self.launchSignUpScreen)
-        self.signUpButton.grid(row=5, column=1, sticky="S", padx=10, pady=5, ipadx=15)
+        tk.Button(self.frame, text="Login", command=self.loginInitiator).pack(expand=True, padx=15, pady=15, ipadx=15)
+
+        tk.Label(self.frame, text="Don't have an account?").pack(expand=True, side=tk.TOP, padx=20, pady=(35, 10))
+        tk.Button(self.frame, text="Create a new account", command=self.launchSignUpScreen).pack(expand=True, side=tk.TOP, ipadx=15)
 
     def launchSignUpScreen(self):
         self.frame.destroy()
@@ -105,9 +108,9 @@ class LoginScreen:
 
     def saveUserInfoInitiator(self):
         self.waitDialog = StickyDialog(self.root, message="Initializing...\nPlease wait!")
-        user = User(userId=self.loginResponse.uid, name=self.loginResponse.name, email=self.emailStr)
+        self.user = User(userId=self.loginResponse.uid, name=self.loginResponse.name, email=self.emailStr)
         self.queue = Queue()
-        saveUserInfoThread = SaveUserLoginInfo(self.queue, user=user, accJwt=self.loginResponse.accessToken,
+        saveUserInfoThread = SaveUserLoginInfo(self.queue, user=self.user, accJwt=self.loginResponse.accessToken,
                                                refJwt=self.loginResponse.refreshToken)
         saveUserInfoThread.start()
         self.root.after(100, self.checkQueueForDb)
@@ -123,7 +126,7 @@ class LoginScreen:
     def afterDbResponse(self):
         if self.dbWriteResponse:
             self.frame.destroy()
-            HomeScreen(self.root)
+            HomeScreen(self.root, user=self.user)
         else:
             GenericDialog(self.root, title="Database Error!",
                           message="Unable to save login info!\nProgram will exit now.")

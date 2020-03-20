@@ -24,6 +24,16 @@ class UnitedShieldSpaceStub(object):
         request_serializer=unitedShieldSpace__pb2.UserCredentials.SerializeToString,
         response_deserializer=unitedShieldSpace__pb2.LoginResponse.FromString,
         )
+    self.GetNewTokens = channel.unary_unary(
+        '/unitedshieldspace.UnitedShieldSpace/GetNewTokens',
+        request_serializer=unitedShieldSpace__pb2.RefreshTokenDetails.SerializeToString,
+        response_deserializer=unitedShieldSpace__pb2.NewTokens.FromString,
+        )
+    self.UploadFile = channel.stream_unary(
+        '/unitedshieldspace.UnitedShieldSpace/UploadFile',
+        request_serializer=unitedShieldSpace__pb2.FileSegment.SerializeToString,
+        response_deserializer=unitedShieldSpace__pb2.UploadStatus.FromString,
+        )
 
 
 class UnitedShieldSpaceServicer(object):
@@ -44,6 +54,20 @@ class UnitedShieldSpaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def GetNewTokens(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def UploadFile(self, request_iterator, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_UnitedShieldSpaceServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -56,6 +80,16 @@ def add_UnitedShieldSpaceServicer_to_server(servicer, server):
           servicer.LoginUser,
           request_deserializer=unitedShieldSpace__pb2.UserCredentials.FromString,
           response_serializer=unitedShieldSpace__pb2.LoginResponse.SerializeToString,
+      ),
+      'GetNewTokens': grpc.unary_unary_rpc_method_handler(
+          servicer.GetNewTokens,
+          request_deserializer=unitedShieldSpace__pb2.RefreshTokenDetails.FromString,
+          response_serializer=unitedShieldSpace__pb2.NewTokens.SerializeToString,
+      ),
+      'UploadFile': grpc.stream_unary_rpc_method_handler(
+          servicer.UploadFile,
+          request_deserializer=unitedShieldSpace__pb2.FileSegment.FromString,
+          response_serializer=unitedShieldSpace__pb2.UploadStatus.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

@@ -5,6 +5,9 @@ package unitedshieldspace;
 service UnitedShieldSpace {
     rpc RegisterNewUser(NewUserDetails) returns (UserCreationStatus);
     rpc LoginUser(UserCredentials) returns (LoginResponse);
+    rpc GetNewTokens(RefreshTokenDetails) returns (NewTokens);
+    rpc UploadFile(stream FileSegment) returns (UploadStatus);
+    // rpc ListUserFiles(UserDetails) returns (stream FileDetails);
 }
 
 message NewUserDetails {
@@ -29,3 +32,34 @@ message LoginResponse {
     string accessToken = 4;
     string refreshToken = 5;
 }
+
+message RefreshTokenDetails {
+    string uid = 1;
+    string refreshToken = 2;
+}
+
+message NewTokens {
+    string accessToken = 1;
+    string refreshToken = 2;
+}
+
+message FileSegment {
+    string uid = 1;
+    string fileName = 2;
+    string accessToken = 3;
+    bytes fileSegmentData = 4;
+}
+
+message UploadStatus {
+    bool uploadStatus = 1;
+}
+
+// message UserDetails {
+//     string uid = 1;
+//     string accessToken = 2;
+// }
+
+// message FileDetails {
+//     string name = 1;
+//     string createdOn = 2;
+// }

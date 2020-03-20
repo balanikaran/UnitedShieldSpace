@@ -65,8 +65,6 @@ class CheckDbLoginStatus:
             else:
                 rowId, status = value
 
-            dbConnection.commit()
-
             return status == 1
 
         except sqlite3.Error as error:
@@ -85,6 +83,9 @@ class RemoveUserLoginInfo:
 
             dbCursor = dbConnection.cursor()
 
+            truncateUsetTableQuery = '''DELETE FROM user'''
+            dbCursor.execute(truncateUsetTableQuery)
+
             # because user is now logged out, we well also make the
             # login status in loginstatus table to 0 (false)
             updateStatusQuery = '''INSERT OR REPLACE INTO loginstatus (id, islogin) VALUES (1, 0)'''
@@ -94,6 +95,83 @@ class RemoveUserLoginInfo:
             # access and refresh tokens of the user to the auth table
             removeAuthQuery = '''INSERT OR REPLACE INTO auth (id, accjwt, refjwt) VALUES (?, ?, ?)'''
             dbCursor.execute(removeAuthQuery, (1, "NULL", "NULL"))
+
+            dbConnection.commit()
+            return True
+        except sqlite3.Error as error:
+            print(error)
+            return False
+        finally:
+            dbConnection.close()
+
+
+class GetUser:
+    @staticmethod
+    def get():
+        dbConnection = None
+        try:
+            currentDir = os.path.dirname(os.path.realpath(__file__))
+            dbConnection = sqlite3.connect(currentDir + "/UssClientDatabase.db")
+
+            dbCursor = dbConnection.cursor()
+
+            getLoginStatusQuery = '''SELECT * FROM user LIMIT 1'''
+            dbCursor.execute(getLoginStatusQuery)
+
+            value = dbCursor.fetchone()
+
+            if value == None:
+                return None
+            else:
+                userId, name, email = value
+                return User(userId=userId, name=name, email=email)
+
+        except sqlite3.Error as error:
+            return False
+        finally:
+            dbConnection.close()
+
+
+class GetTokens:
+    @staticmethod
+    def get():
+        dbConnection = None
+        try:
+            currentDir = os.path.dirname(os.path.realpath(__file__))
+            dbConnection = sqlite3.connect(currentDir + "/UssClientDatabase.db")
+
+            dbCursor = dbConnection.cursor()
+
+            getTokensQuery = '''SELECT * FROM auth LIMIT 1'''
+            dbCursor.execute(getTokensQuery)
+
+            value = dbCursor.fetchone()
+
+            if value == None:
+                return None
+            else:
+                return value[1], value[2]
+
+        except sqlite3.Error as error:
+            return False
+        finally:
+            dbConnection.close()
+
+
+class UpdateTokens:
+    @staticmethod
+    def update(accessToken, refreshToken):
+        dbConnection = None
+        try:
+            currentDir = os.path.dirname(os.path.realpath(__file__))
+            dbConnection = sqlite3.connect(currentDir + "/UssClientDatabase.db")
+
+            dbCursor = dbConnection.cursor()
+
+            # because user is now logged in, we will also insert
+            # access and refresh tokens of the user to the auth table
+            saveAuthQuery = '''INSERT OR REPLACE INTO auth (id, accjwt, refjwt) VALUES (?, ?, ?)'''
+            dbCursor.execute(saveAuthQuery, (1, accessToken, refreshToken))
 
             dbConnection.commit()
             return True
