@@ -77,13 +77,15 @@ class UploadFile(Thread):
 
     def getFileChunks(self):
         with open(self.filePath, 'rb') as f:
-            yield ussPb.FileSegment(email=self.user.email, uid=self.user.userId, fileName=self.fileName, accessToken=self.accessToken,
+            yield ussPb.FileSegment(email=self.user.email, uid=self.user.userId, fileName=self.fileName,
+                                    accessToken=self.accessToken,
                                     fileSegmentData=None)
             while True:
                 piece = f.read(chunkSize)
                 if len(piece) == 0:
                     return
-                yield ussPb.FileSegment(email=self.user.email, uid=self.user.userId, fileName=self.fileName, accessToken=self.accessToken,
+                yield ussPb.FileSegment(email=self.user.email, uid=self.user.userId, fileName=self.fileName,
+                                        accessToken=self.accessToken,
                                         fileSegmentData=piece)
 
 
@@ -102,7 +104,8 @@ class GetUserFileList(Thread):
         stub = unitedShieldSpace.UnitedShieldSpaceStub(channel)
         try:
             print("trying to get user files with old tokens...")
-            userFilesResponse = stub.ListUserFiles(ussPb.UserDetails(email=self.userEmail, accessToken=self.accessToken))
+            userFilesResponse = stub.ListUserFiles(
+                ussPb.UserDetails(email=self.userEmail, accessToken=self.accessToken))
             for f in userFilesResponse:
                 details = FileDetails(owner=self.userEmail, name=f.name, created=f.createdOn)
                 self.fileDetailsArr.append(details)
@@ -155,5 +158,78 @@ class GetUserFileList(Thread):
                         self.queue.put(rpcError.code())
 
             else:
-                print("some other error occured with old tokens...")
+                print("some other error occurred with old tokens...", rpcError.code())
+                self.queue.put(rpcError.code())
+
+
+class GetSharedWithMeFileList(Thread):
+    def __init__(self, queue: Queue, uid, userEmail, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.queue = queue
+        self.userEmail = userEmail
+        self.uid = uid
+        self.userFileResponse = None
+        (self.accessToken, self.refreshToken) = GetTokens().get()
+        self.fileDetailsArr = []
+
+    def run(self):
+        channel = grpc.insecure_channel(serverAddress + ":" + serverPort)
+        stub = unitedShieldSpace.UnitedShieldSpaceStub(channel)
+        try:
+            print("trying to get user files with old tokens...")
+            userFilesResponse = stub.ListSharedWithMeFiles(
+                ussPb.UserDetails(email=self.userEmail, accessToken=self.accessToken))
+            for f in userFilesResponse:
+                details = FileDetails(owner=f.owner, name=f.name, created=f.createdOn)
+                self.fileDetailsArr.append(details)
+
+            print(type(self.fileDetailsArr))
+            self.queue.put(self.fileDetailsArr)
+
+        except grpc.RpcError as rpcError:
+            print("exception occurred with old tokens...")
+            print(rpcError.code())
+
+            if rpcError.code() == StatusCode.UNAUTHENTICATED:
+                print("invalid access token...")
+
+                try:
+                    print("trying to get new tokens...")
+                    newTokensResponse = stub.GetNewTokens(
+                        ussPb.RefreshTokenDetails(uid=self.uid, refreshToken=self.refreshToken))
+                    print("new tokens :", newTokensResponse)
+                    if UpdateTokens().update(newTokensResponse.accessToken, newTokensResponse.refreshToken):
+                        self.accessToken = newTokensResponse.accessToken
+                        self.refreshToken = newTokensResponse.refreshToken
+
+                        try:
+                            userFilesResponse = stub.ListSharedWithMeFiles(
+                                ussPb.UserDetails(email=self.userEmail, accessToken=self.accessToken))
+
+                            for f in userFilesResponse:
+                                details = FileDetails(owner=f.owner, name=f.name, created=f.createdOn)
+                                self.fileDetailsArr.append(details)
+
+                            print(self.fileDetailsArr)
+                            self.queue.put(self.fileDetailsArr)
+                        except grpc.RpcError as rpcError:
+                            print("error occured with new tokens...")
+                            print(rpcError.code())
+                            self.queue.put(rpcError.code())
+                    else:
+                        self.queue.put(StatusCode.UNAUTHENTICATED)
+
+                except grpc.RpcError as rpcError:
+                    print("exception occured with ref token...")
+                    print(rpcError.code())
+
+                    if rpcError.code() == StatusCode.UNAUTHENTICATED:
+                        print("invalid ref token, perform signout...")
+                        self.queue.put(StatusCode.UNAUTHENTICATED)
+                    else:
+                        print("some other error occured while trying to get new tokens, perform signout...")
+                        self.queue.put(rpcError.code())
+
+            else:
+                print("some other error occurred with old tokens...", rpcError.code())
                 self.queue.put(rpcError.code())

@@ -18,6 +18,7 @@ import (
 	"github.com/krnblni/UnitedShieldSpace/server/logger"
 	"github.com/krnblni/UnitedShieldSpace/server/models"
 	"github.com/krnblni/UnitedShieldSpace/server/utils"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -115,7 +116,7 @@ func (u *ussServer) UploadFile(stream unitedShieldSpace.UnitedShieldSpace_Upload
 				ID:    userEmail + userID + clientFileName,
 				Owner: userEmail,
 				Name:  clientFileName,
-				ACL:   make([]string, 0),
+				ACL:   make([]primitive.D, 0),
 				Created: time.Now().Unix(),
 			}
 			nodeCreationStatus := db.CreateNewFileNode(node)
@@ -181,6 +182,39 @@ func (u *ussServer) ListUserFiles(userDetails *unitedShieldSpace.UserDetails, st
 		}
 		ussLogger.Println(fileDetail)
 		if err := stream.Send(fileDetail); err != nil {
+			ussLogger.Println("error sending the file details", err)
+			return status.Error(codes.Internal, "internal server error")
+		}
+	}
+
+	return nil
+}
+
+func (u *ussServer) ListSharedWithMeFiles(userDetails *unitedShieldSpace.UserDetails, stream unitedShieldSpace.UnitedShieldSpace_ListSharedWithMeFilesServer) error {
+	ussLogger.Println("List user files was called...")
+	// verify access token here first
+	authStatus := auth.VerifyAccessToken(userDetails.GetAccessToken())
+	if authStatus == codes.Unauthenticated {
+		return status.Error(codes.Unauthenticated, "invalid access token")
+	}
+
+	sharedWithMeFilesList, err := db.FetchSharedWithMeFiles(userDetails.GetEmail())
+	if err != nil {
+		return status.Error(codes.Internal, "internal server error")
+	}
+
+	if len(sharedWithMeFilesList) == 0 {
+		return status.Error(codes.NotFound, "no files found")
+	}
+
+	for _, sharedWithMeFile := range sharedWithMeFilesList {
+		extFileDetail := &unitedShieldSpace.ExtFileDetails{
+			Name: sharedWithMeFile.Name,
+			Owner: sharedWithMeFile.Owner,
+			CreatedOn: sharedWithMeFile.Created,
+		}
+		ussLogger.Println(extFileDetail)
+		if err := stream.Send(extFileDetail); err != nil {
 			ussLogger.Println("error sending the file details", err)
 			return status.Error(codes.Internal, "internal server error")
 		}

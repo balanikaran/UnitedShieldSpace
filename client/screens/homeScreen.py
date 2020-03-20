@@ -5,7 +5,7 @@ from client.db.dbOperations import RemoveUserLoginInfo
 from client.utils.windowUtils import centerWindow
 from client.models.user import User
 from client.utils.getAppLogo import getLogo
-from client.communication.fileOperations import GetUserFileList
+from client.communication.fileOperations import GetUserFileList, GetSharedWithMeFileList
 from queue import Queue
 from client.screens.stickyDialog import StickyDialog
 from grpc import StatusCode
@@ -22,6 +22,8 @@ class HomeScreen:
 
         self.userFilesResponse = None
         self.userFilesQueue = Queue()
+        self.sharedWithMeFilesResponse = None
+        self.sharedWithMeFilesQueue = Queue()
 
         self.initHomeScreen()
 
@@ -47,7 +49,6 @@ class HomeScreen:
 
         # Shared With Me page for notebook
         self.sharedWithMeFrame = tk.Frame(self.notebook)
-        tk.Label(self.sharedWithMeFrame, text="This is shared files frame").pack(expand=True)
 
         self.notebook.add(self.myFilesFrame, text="My Files")
         self.notebook.add(self.sharedWithMeFrame, text="Shared With Me")
@@ -76,7 +77,7 @@ class HomeScreen:
         self.myFilesTree.heading("datecreated", text="Created On")
         self.myFilesTree.column("datecreated", minwidth=120, width=120, stretch=tk.NO, anchor=tk.CENTER)
 
-        self.waitDialog = StickyDialog(self.root, message="Please wait!\nLoading files list...")
+        self.waitDialog = StickyDialog(self.root, message="Please wait!\nLoading user files list...")
         getUserFilesThread = GetUserFileList(self.userFilesQueue, uid=self.user.userId, userEmail=self.user.email)
         getUserFilesThread.start()
         self.root.after(100, self.checkUserFilesQueue)
@@ -97,7 +98,8 @@ class HomeScreen:
         elif self.userFilesResponse == StatusCode.INTERNAL:
             GenericDialog(self.root, title="Error!", message="Internal Server error!")
         elif self.userFilesResponse == StatusCode.NOT_FOUND:
-            GenericDialog(self.root, title="Error!", message="No files found...")
+            GenericDialog(self.root, title="Error!", message="No my files found...")
+            self.buildSharedWithMeFilesListBox()
         elif self.userFilesResponse == StatusCode.UNAUTHENTICATED:
             self.signOut()
         elif self.userFilesResponse == StatusCode.UNAVAILABLE:
@@ -120,3 +122,57 @@ class HomeScreen:
         for file in self.userFilesResponse:
             value = (file.owner, file.name, file.created)
             self.myFilesTree.insert("", "end", values=value)
+        self.buildSharedWithMeFilesListBox()
+
+    def buildSharedWithMeFilesListBox(self):
+        self.sharedWithMeFilesTree = ttk.Treeview(self.sharedWithMeFrame, columns=["owner", "filename", "datecreated"],
+                                                  show=["headings"], selectmode="browse")
+        self.sharedWithMeFilesTree.pack(expand=True, fill=tk.BOTH)
+
+        style = ttk.Style(self.frame)
+        style.configure('Treeview', rowheight=40)
+
+        self.sharedWithMeFilesTree.heading("owner", text="Owner ID")
+        self.sharedWithMeFilesTree.column("owner", minwidth=220, width=220, stretch=tk.NO, anchor=tk.CENTER)
+
+        self.sharedWithMeFilesTree.heading("filename", text="File Name")
+        self.sharedWithMeFilesTree.column("filename", stretch=tk.YES, anchor=tk.W)
+
+        self.sharedWithMeFilesTree.heading("datecreated", text="Created On")
+        self.sharedWithMeFilesTree.column("datecreated", minwidth=120, width=120, stretch=tk.NO, anchor=tk.CENTER)
+
+        self.swmWaitDialog = StickyDialog(self.root, message="Please wait!\nLoading shared with me files list...")
+        getSharedWithFilesThread = GetSharedWithMeFileList(self.sharedWithMeFilesQueue, uid=self.user.userId,
+                                                           userEmail=self.user.email)
+        getSharedWithFilesThread.start()
+        self.root.after(100, self.checkSharedWithMeFilesQueue)
+
+    def checkSharedWithMeFilesQueue(self):
+        if not self.sharedWithMeFilesQueue.empty():
+            self.sharedWithMeFilesResponse = self.sharedWithMeFilesQueue.get()
+            self.swmWaitDialog.destroy()
+            self.afterSharedWithMeFilesResponse()
+        else:
+            self.root.after(100, self.checkSharedWithMeFilesQueue)
+
+    def afterSharedWithMeFilesResponse(self):
+        print("after shared with me file response")
+        if isinstance(self.sharedWithMeFilesResponse, list):
+            print(self.sharedWithMeFilesResponse)
+            self.populateSharedWithMeFilesInTree()
+        elif self.sharedWithMeFilesResponse == StatusCode.INTERNAL:
+            GenericDialog(self.root, title="Error!", message="Internal Server error!")
+        elif self.sharedWithMeFilesResponse == StatusCode.NOT_FOUND:
+            GenericDialog(self.root, title="Error!", message="No shared with me files found...")
+        elif self.sharedWithMeFilesResponse == StatusCode.UNAUTHENTICATED:
+            self.signOut()
+        elif self.sharedWithMeFilesResponse == StatusCode.UNAVAILABLE:
+            GenericDialog(self.root, title="Error!", message="Server not found!")
+        else:
+            print(self.sharedWithMeFilesResponse)
+            GenericDialog(self.root, title="Error!", message="Error code: ")
+
+    def populateSharedWithMeFilesInTree(self):
+        for file in self.sharedWithMeFilesResponse:
+            value = (file.owner, file.name, file.created)
+            self.sharedWithMeFilesTree.insert("", "end", values=value)

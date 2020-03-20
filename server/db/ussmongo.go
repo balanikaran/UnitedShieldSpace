@@ -230,3 +230,45 @@ func FetchUserFiles(userEmail string) ([]models.FileNode, error) {
 	ussLogger.Println(files)
 	return files, nil
 }
+
+// FetchSharedWithMeFiles - 
+func FetchSharedWithMeFiles(userEmail string) ([]models.FileNode, error) {
+	ussLogger.Print("fetching shared with me files. userEmail - ", userEmail)
+	filesDb, err := getFilesDbCollection()
+	if err != nil {
+		ussLogger.Println("Unable to get files db collection - ", err)
+		return nil, err
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	// get files from database
+	result, err := filesDb.Find(ctx, bson.M{"ACL.email": userEmail})
+	if err != nil {
+		ussLogger.Println("unable to fetch shared with me files - ", err)
+		return nil, err
+	}
+
+	var files []models.FileNode
+
+	for result.Next(context.TODO()){
+		var f models.FileNode
+		err := result.Decode(&f)
+		if err != nil {
+			ussLogger.Println("unable to decode file doc into filenode model - ", err)
+			return nil, err
+		}
+		files = append(files, f)
+	}
+
+	if err := result.Err(); err != nil {
+		ussLogger.Println("results cursor error - ", err)
+		return nil, err
+	}
+
+	defer result.Close(context.TODO())
+
+	ussLogger.Println(files)
+	return files, nil
+}

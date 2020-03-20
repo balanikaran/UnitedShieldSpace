@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='unitedshieldspace',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x17unitedShieldSpace.proto\x12\x11unitedshieldspace\"?\n\x0eNewUserDetails\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\")\n\x12UserCreationStatus\x12\x13\n\x0buserCreated\x18\x01 \x01(\x08\"2\n\x0fUserCredentials\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"j\n\rLoginResponse\x12\x13\n\x0bloginStatus\x18\x01 \x01(\x08\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0b\n\x03uid\x18\x03 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x04 \x01(\t\x12\x14\n\x0crefreshToken\x18\x05 \x01(\t\"8\n\x13RefreshTokenDetails\x12\x0b\n\x03uid\x18\x01 \x01(\t\x12\x14\n\x0crefreshToken\x18\x02 \x01(\t\"6\n\tNewTokens\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x01 \x01(\t\x12\x14\n\x0crefreshToken\x18\x02 \x01(\t\"i\n\x0b\x46ileSegment\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x0b\n\x03uid\x18\x02 \x01(\t\x12\x10\n\x08\x66ileName\x18\x03 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x04 \x01(\t\x12\x17\n\x0f\x66ileSegmentData\x18\x05 \x01(\x0c\"$\n\x0cUploadStatus\x12\x14\n\x0cuploadStatus\x18\x01 \x01(\x08\"1\n\x0bUserDetails\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x02 \x01(\t\".\n\x0b\x46ileDetails\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tcreatedOn\x18\x02 \x01(\x03\x32\xbd\x03\n\x11UnitedShieldSpace\x12[\n\x0fRegisterNewUser\x12!.unitedshieldspace.NewUserDetails\x1a%.unitedshieldspace.UserCreationStatus\x12Q\n\tLoginUser\x12\".unitedshieldspace.UserCredentials\x1a .unitedshieldspace.LoginResponse\x12T\n\x0cGetNewTokens\x12&.unitedshieldspace.RefreshTokenDetails\x1a\x1c.unitedshieldspace.NewTokens\x12O\n\nUploadFile\x12\x1e.unitedshieldspace.FileSegment\x1a\x1f.unitedshieldspace.UploadStatus(\x01\x12Q\n\rListUserFiles\x12\x1e.unitedshieldspace.UserDetails\x1a\x1e.unitedshieldspace.FileDetails0\x01\x62\x06proto3'
+  serialized_pb=b'\n\x17unitedShieldSpace.proto\x12\x11unitedshieldspace\"?\n\x0eNewUserDetails\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\")\n\x12UserCreationStatus\x12\x13\n\x0buserCreated\x18\x01 \x01(\x08\"2\n\x0fUserCredentials\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"j\n\rLoginResponse\x12\x13\n\x0bloginStatus\x18\x01 \x01(\x08\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0b\n\x03uid\x18\x03 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x04 \x01(\t\x12\x14\n\x0crefreshToken\x18\x05 \x01(\t\"8\n\x13RefreshTokenDetails\x12\x0b\n\x03uid\x18\x01 \x01(\t\x12\x14\n\x0crefreshToken\x18\x02 \x01(\t\"6\n\tNewTokens\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x01 \x01(\t\x12\x14\n\x0crefreshToken\x18\x02 \x01(\t\"i\n\x0b\x46ileSegment\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x0b\n\x03uid\x18\x02 \x01(\t\x12\x10\n\x08\x66ileName\x18\x03 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x04 \x01(\t\x12\x17\n\x0f\x66ileSegmentData\x18\x05 \x01(\x0c\"$\n\x0cUploadStatus\x12\x14\n\x0cuploadStatus\x18\x01 \x01(\x08\"1\n\x0bUserDetails\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x02 \x01(\t\".\n\x0b\x46ileDetails\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tcreatedOn\x18\x02 \x01(\x03\"@\n\x0e\x45xtFileDetails\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05owner\x18\x02 \x01(\t\x12\x11\n\tcreatedOn\x18\x03 \x01(\x03\x32\x9b\x04\n\x11UnitedShieldSpace\x12[\n\x0fRegisterNewUser\x12!.unitedshieldspace.NewUserDetails\x1a%.unitedshieldspace.UserCreationStatus\x12Q\n\tLoginUser\x12\".unitedshieldspace.UserCredentials\x1a .unitedshieldspace.LoginResponse\x12T\n\x0cGetNewTokens\x12&.unitedshieldspace.RefreshTokenDetails\x1a\x1c.unitedshieldspace.NewTokens\x12O\n\nUploadFile\x12\x1e.unitedshieldspace.FileSegment\x1a\x1f.unitedshieldspace.UploadStatus(\x01\x12Q\n\rListUserFiles\x12\x1e.unitedshieldspace.UserDetails\x1a\x1e.unitedshieldspace.FileDetails0\x01\x12\\\n\x15ListSharedWithMeFiles\x12\x1e.unitedshieldspace.UserDetails\x1a!.unitedshieldspace.ExtFileDetails0\x01\x62\x06proto3'
 )
 
 
@@ -438,6 +438,51 @@ _FILEDETAILS = _descriptor.Descriptor(
   serialized_end=670,
 )
 
+
+_EXTFILEDETAILS = _descriptor.Descriptor(
+  name='ExtFileDetails',
+  full_name='unitedshieldspace.ExtFileDetails',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='name', full_name='unitedshieldspace.ExtFileDetails.name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='owner', full_name='unitedshieldspace.ExtFileDetails.owner', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='createdOn', full_name='unitedshieldspace.ExtFileDetails.createdOn', index=2,
+      number=3, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=672,
+  serialized_end=736,
+)
+
 DESCRIPTOR.message_types_by_name['NewUserDetails'] = _NEWUSERDETAILS
 DESCRIPTOR.message_types_by_name['UserCreationStatus'] = _USERCREATIONSTATUS
 DESCRIPTOR.message_types_by_name['UserCredentials'] = _USERCREDENTIALS
@@ -448,6 +493,7 @@ DESCRIPTOR.message_types_by_name['FileSegment'] = _FILESEGMENT
 DESCRIPTOR.message_types_by_name['UploadStatus'] = _UPLOADSTATUS
 DESCRIPTOR.message_types_by_name['UserDetails'] = _USERDETAILS
 DESCRIPTOR.message_types_by_name['FileDetails'] = _FILEDETAILS
+DESCRIPTOR.message_types_by_name['ExtFileDetails'] = _EXTFILEDETAILS
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 NewUserDetails = _reflection.GeneratedProtocolMessageType('NewUserDetails', (_message.Message,), {
@@ -520,6 +566,13 @@ FileDetails = _reflection.GeneratedProtocolMessageType('FileDetails', (_message.
   })
 _sym_db.RegisterMessage(FileDetails)
 
+ExtFileDetails = _reflection.GeneratedProtocolMessageType('ExtFileDetails', (_message.Message,), {
+  'DESCRIPTOR' : _EXTFILEDETAILS,
+  '__module__' : 'unitedShieldSpace_pb2'
+  # @@protoc_insertion_point(class_scope:unitedshieldspace.ExtFileDetails)
+  })
+_sym_db.RegisterMessage(ExtFileDetails)
+
 
 
 _UNITEDSHIELDSPACE = _descriptor.ServiceDescriptor(
@@ -528,8 +581,8 @@ _UNITEDSHIELDSPACE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=673,
-  serialized_end=1118,
+  serialized_start=739,
+  serialized_end=1278,
   methods=[
   _descriptor.MethodDescriptor(
     name='RegisterNewUser',
@@ -574,6 +627,15 @@ _UNITEDSHIELDSPACE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_USERDETAILS,
     output_type=_FILEDETAILS,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='ListSharedWithMeFiles',
+    full_name='unitedshieldspace.UnitedShieldSpace.ListSharedWithMeFiles',
+    index=5,
+    containing_service=None,
+    input_type=_USERDETAILS,
+    output_type=_EXTFILEDETAILS,
     serialized_options=None,
   ),
 ])

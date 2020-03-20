@@ -8,6 +8,7 @@ service UnitedShieldSpace {
     rpc GetNewTokens(RefreshTokenDetails) returns (NewTokens);
     rpc UploadFile(stream FileSegment) returns (UploadStatus);
     rpc ListUserFiles(UserDetails) returns (stream FileDetails);
+    rpc ListSharedWithMeFiles(UserDetails) returns (stream ExtFileDetails);
 }
 
 message NewUserDetails {
@@ -63,4 +64,10 @@ message UserDetails {
 message FileDetails {
     string name = 1;
     int64 createdOn = 2;
+}
+
+message ExtFileDetails {
+    string name = 1;
+    string owner = 2;
+    int64 createdOn = 3;
 }
