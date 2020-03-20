@@ -236,11 +236,307 @@ func (m *LoginResponse) GetRefreshToken() string {
 	return ""
 }
 
+type RefreshTokenDetails struct {
+	Uid                  string   `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	RefreshToken         string   `protobuf:"bytes,2,opt,name=refreshToken,proto3" json:"refreshToken,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *RefreshTokenDetails) Reset()         { *m = RefreshTokenDetails{} }
+func (m *RefreshTokenDetails) String() string { return proto.CompactTextString(m) }
+func (*RefreshTokenDetails) ProtoMessage()    {}
+func (*RefreshTokenDetails) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e766365d0c253d38, []int{4}
+}
+
+func (m *RefreshTokenDetails) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_RefreshTokenDetails.Unmarshal(m, b)
+}
+func (m *RefreshTokenDetails) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_RefreshTokenDetails.Marshal(b, m, deterministic)
+}
+func (m *RefreshTokenDetails) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RefreshTokenDetails.Merge(m, src)
+}
+func (m *RefreshTokenDetails) XXX_Size() int {
+	return xxx_messageInfo_RefreshTokenDetails.Size(m)
+}
+func (m *RefreshTokenDetails) XXX_DiscardUnknown() {
+	xxx_messageInfo_RefreshTokenDetails.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RefreshTokenDetails proto.InternalMessageInfo
+
+func (m *RefreshTokenDetails) GetUid() string {
+	if m != nil {
+		return m.Uid
+	}
+	return ""
+}
+
+func (m *RefreshTokenDetails) GetRefreshToken() string {
+	if m != nil {
+		return m.RefreshToken
+	}
+	return ""
+}
+
+type NewTokens struct {
+	AccessToken          string   `protobuf:"bytes,1,opt,name=accessToken,proto3" json:"accessToken,omitempty"`
+	RefreshToken         string   `protobuf:"bytes,2,opt,name=refreshToken,proto3" json:"refreshToken,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *NewTokens) Reset()         { *m = NewTokens{} }
+func (m *NewTokens) String() string { return proto.CompactTextString(m) }
+func (*NewTokens) ProtoMessage()    {}
+func (*NewTokens) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e766365d0c253d38, []int{5}
+}
+
+func (m *NewTokens) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_NewTokens.Unmarshal(m, b)
+}
+func (m *NewTokens) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_NewTokens.Marshal(b, m, deterministic)
+}
+func (m *NewTokens) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NewTokens.Merge(m, src)
+}
+func (m *NewTokens) XXX_Size() int {
+	return xxx_messageInfo_NewTokens.Size(m)
+}
+func (m *NewTokens) XXX_DiscardUnknown() {
+	xxx_messageInfo_NewTokens.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NewTokens proto.InternalMessageInfo
+
+func (m *NewTokens) GetAccessToken() string {
+	if m != nil {
+		return m.AccessToken
+	}
+	return ""
+}
+
+func (m *NewTokens) GetRefreshToken() string {
+	if m != nil {
+		return m.RefreshToken
+	}
+	return ""
+}
+
+type FileSegment struct {
+	Uid                  string   `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	FileName             string   `protobuf:"bytes,2,opt,name=fileName,proto3" json:"fileName,omitempty"`
+	AccessToken          string   `protobuf:"bytes,3,opt,name=accessToken,proto3" json:"accessToken,omitempty"`
+	FileSegmentData      []byte   `protobuf:"bytes,4,opt,name=fileSegmentData,proto3" json:"fileSegmentData,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *FileSegment) Reset()         { *m = FileSegment{} }
+func (m *FileSegment) String() string { return proto.CompactTextString(m) }
+func (*FileSegment) ProtoMessage()    {}
+func (*FileSegment) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e766365d0c253d38, []int{6}
+}
+
+func (m *FileSegment) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_FileSegment.Unmarshal(m, b)
+}
+func (m *FileSegment) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_FileSegment.Marshal(b, m, deterministic)
+}
+func (m *FileSegment) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FileSegment.Merge(m, src)
+}
+func (m *FileSegment) XXX_Size() int {
+	return xxx_messageInfo_FileSegment.Size(m)
+}
+func (m *FileSegment) XXX_DiscardUnknown() {
+	xxx_messageInfo_FileSegment.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FileSegment proto.InternalMessageInfo
+
+func (m *FileSegment) GetUid() string {
+	if m != nil {
+		return m.Uid
+	}
+	return ""
+}
+
+func (m *FileSegment) GetFileName() string {
+	if m != nil {
+		return m.FileName
+	}
+	return ""
+}
+
+func (m *FileSegment) GetAccessToken() string {
+	if m != nil {
+		return m.AccessToken
+	}
+	return ""
+}
+
+func (m *FileSegment) GetFileSegmentData() []byte {
+	if m != nil {
+		return m.FileSegmentData
+	}
+	return nil
+}
+
+type UploadStatus struct {
+	UploadStatus         bool     `protobuf:"varint,1,opt,name=uploadStatus,proto3" json:"uploadStatus,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UploadStatus) Reset()         { *m = UploadStatus{} }
+func (m *UploadStatus) String() string { return proto.CompactTextString(m) }
+func (*UploadStatus) ProtoMessage()    {}
+func (*UploadStatus) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e766365d0c253d38, []int{7}
+}
+
+func (m *UploadStatus) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UploadStatus.Unmarshal(m, b)
+}
+func (m *UploadStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UploadStatus.Marshal(b, m, deterministic)
+}
+func (m *UploadStatus) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UploadStatus.Merge(m, src)
+}
+func (m *UploadStatus) XXX_Size() int {
+	return xxx_messageInfo_UploadStatus.Size(m)
+}
+func (m *UploadStatus) XXX_DiscardUnknown() {
+	xxx_messageInfo_UploadStatus.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UploadStatus proto.InternalMessageInfo
+
+func (m *UploadStatus) GetUploadStatus() bool {
+	if m != nil {
+		return m.UploadStatus
+	}
+	return false
+}
+
+type UserDetails struct {
+	Uid                  string   `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	AccessToken          string   `protobuf:"bytes,2,opt,name=accessToken,proto3" json:"accessToken,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UserDetails) Reset()         { *m = UserDetails{} }
+func (m *UserDetails) String() string { return proto.CompactTextString(m) }
+func (*UserDetails) ProtoMessage()    {}
+func (*UserDetails) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e766365d0c253d38, []int{8}
+}
+
+func (m *UserDetails) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UserDetails.Unmarshal(m, b)
+}
+func (m *UserDetails) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UserDetails.Marshal(b, m, deterministic)
+}
+func (m *UserDetails) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UserDetails.Merge(m, src)
+}
+func (m *UserDetails) XXX_Size() int {
+	return xxx_messageInfo_UserDetails.Size(m)
+}
+func (m *UserDetails) XXX_DiscardUnknown() {
+	xxx_messageInfo_UserDetails.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UserDetails proto.InternalMessageInfo
+
+func (m *UserDetails) GetUid() string {
+	if m != nil {
+		return m.Uid
+	}
+	return ""
+}
+
+func (m *UserDetails) GetAccessToken() string {
+	if m != nil {
+		return m.AccessToken
+	}
+	return ""
+}
+
+type FileDetails struct {
+	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	CreatedOn            string   `protobuf:"bytes,2,opt,name=createdOn,proto3" json:"createdOn,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *FileDetails) Reset()         { *m = FileDetails{} }
+func (m *FileDetails) String() string { return proto.CompactTextString(m) }
+func (*FileDetails) ProtoMessage()    {}
+func (*FileDetails) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e766365d0c253d38, []int{9}
+}
+
+func (m *FileDetails) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_FileDetails.Unmarshal(m, b)
+}
+func (m *FileDetails) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_FileDetails.Marshal(b, m, deterministic)
+}
+func (m *FileDetails) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FileDetails.Merge(m, src)
+}
+func (m *FileDetails) XXX_Size() int {
+	return xxx_messageInfo_FileDetails.Size(m)
+}
+func (m *FileDetails) XXX_DiscardUnknown() {
+	xxx_messageInfo_FileDetails.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FileDetails proto.InternalMessageInfo
+
+func (m *FileDetails) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *FileDetails) GetCreatedOn() string {
+	if m != nil {
+		return m.CreatedOn
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*NewUserDetails)(nil), "unitedshieldspace.NewUserDetails")
 	proto.RegisterType((*UserCreationStatus)(nil), "unitedshieldspace.UserCreationStatus")
 	proto.RegisterType((*UserCredentials)(nil), "unitedshieldspace.UserCredentials")
 	proto.RegisterType((*LoginResponse)(nil), "unitedshieldspace.LoginResponse")
+	proto.RegisterType((*RefreshTokenDetails)(nil), "unitedshieldspace.RefreshTokenDetails")
+	proto.RegisterType((*NewTokens)(nil), "unitedshieldspace.NewTokens")
+	proto.RegisterType((*FileSegment)(nil), "unitedshieldspace.FileSegment")
+	proto.RegisterType((*UploadStatus)(nil), "unitedshieldspace.UploadStatus")
+	proto.RegisterType((*UserDetails)(nil), "unitedshieldspace.UserDetails")
+	proto.RegisterType((*FileDetails)(nil), "unitedshieldspace.FileDetails")
 }
 
 func init() {
@@ -248,27 +544,39 @@ func init() {
 }
 
 var fileDescriptor_e766365d0c253d38 = []byte{
-	// 311 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x52, 0xcd, 0x4e, 0xf3, 0x30,
-	0x10, 0x54, 0xfa, 0xf3, 0xa9, 0xdd, 0x0f, 0x28, 0xb5, 0x90, 0x88, 0x72, 0x0a, 0x91, 0x90, 0x38,
-	0xe5, 0x00, 0x12, 0x2f, 0x50, 0x8e, 0x08, 0x89, 0x84, 0x72, 0xe1, 0x64, 0x92, 0xa5, 0xb5, 0x48,
-	0xed, 0xc8, 0xeb, 0xa8, 0x4f, 0xc3, 0xd3, 0xf0, 0x62, 0xc8, 0x4e, 0x53, 0x92, 0x92, 0xde, 0xec,
-	0x99, 0xf1, 0x4e, 0x76, 0x26, 0x70, 0x59, 0x49, 0x61, 0x30, 0x4f, 0xd7, 0x02, 0x8b, 0x3c, 0x2d,
-	0x79, 0x86, 0x71, 0xa9, 0x95, 0x51, 0x6c, 0x5e, 0x13, 0xe4, 0x08, 0xb2, 0x44, 0xf4, 0x0a, 0x67,
-	0x4f, 0xb8, 0x5d, 0x12, 0xea, 0x07, 0x34, 0x5c, 0x14, 0xc4, 0x18, 0x8c, 0x24, 0xdf, 0xa0, 0xef,
-	0x85, 0xde, 0xcd, 0x34, 0x71, 0x67, 0x76, 0x01, 0x63, 0xdc, 0x70, 0x51, 0xf8, 0x03, 0x07, 0xd6,
-	0x17, 0x16, 0xc0, 0xa4, 0xe4, 0x44, 0x5b, 0xa5, 0x73, 0x7f, 0xe8, 0x88, 0xfd, 0x3d, 0xba, 0x07,
-	0x66, 0x87, 0x2e, 0x34, 0x72, 0x23, 0x94, 0x4c, 0x0d, 0x37, 0x15, 0xb1, 0x10, 0xfe, 0x57, 0x0d,
-	0x8a, 0xb9, 0xb3, 0x98, 0x24, 0x6d, 0x28, 0x5a, 0xc0, 0x6c, 0xf7, 0x2e, 0x47, 0x69, 0x04, 0x2f,
-	0xe8, 0xd7, 0xdc, 0x3b, 0x66, 0x3e, 0x38, 0x30, 0xff, 0xf2, 0xe0, 0xf4, 0x51, 0xad, 0x84, 0x4c,
-	0x90, 0x4a, 0x25, 0x09, 0xad, 0x71, 0x61, 0x81, 0xfa, 0x3b, 0x1a, 0xe3, 0x16, 0xb4, 0x5f, 0x7b,
-	0xd0, 0x5a, 0xfb, 0x1c, 0x86, 0x95, 0x68, 0x76, 0xb3, 0x47, 0x3b, 0x87, 0x67, 0x19, 0x12, 0xbd,
-	0xa8, 0x4f, 0x94, 0xfe, 0xc8, 0x31, 0x6d, 0x88, 0x45, 0x70, 0xa2, 0xf1, 0x43, 0x23, 0xad, 0x6b,
-	0xc9, 0xd8, 0x49, 0x3a, 0xd8, 0xed, 0xb7, 0x07, 0xf3, 0xe5, 0x61, 0x47, 0xec, 0x0d, 0x66, 0x09,
-	0xae, 0x04, 0x19, 0xd4, 0xbb, 0x4a, 0xd8, 0x55, 0xfc, 0xa7, 0xb1, 0xb8, 0x5b, 0x57, 0x70, 0xdd,
-	0x23, 0xe9, 0x49, 0xfe, 0x19, 0xa6, 0x2e, 0x11, 0x37, 0x36, 0x3a, 0xfe, 0xa6, 0x49, 0x3d, 0x08,
-	0x7b, 0x34, 0x9d, 0x4c, 0xdf, 0xff, 0xb9, 0x9f, 0xea, 0xee, 0x27, 0x00, 0x00, 0xff, 0xff, 0x45,
-	0xba, 0x7e, 0x84, 0x6f, 0x02, 0x00, 0x00,
+	// 503 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x54, 0xc1, 0x8e, 0xd3, 0x30,
+	0x10, 0x95, 0xd3, 0x5d, 0xd4, 0x4e, 0xb3, 0x94, 0x35, 0x48, 0x54, 0xd1, 0x0a, 0x8a, 0x25, 0x50,
+	0x4f, 0x15, 0x5a, 0x24, 0xae, 0x08, 0xed, 0x0a, 0x0e, 0xac, 0xba, 0x6a, 0xba, 0xe5, 0xc2, 0xc9,
+	0x34, 0xd3, 0xd6, 0x22, 0x4d, 0xa2, 0xd8, 0x51, 0x3f, 0x81, 0xaf, 0xe0, 0x53, 0xf8, 0x37, 0x64,
+	0x27, 0x69, 0xdc, 0xd4, 0x65, 0x6f, 0xf1, 0x9b, 0xf1, 0x7b, 0x6f, 0xc6, 0x33, 0x81, 0x97, 0x45,
+	0x22, 0x14, 0x46, 0xf3, 0x8d, 0xc0, 0x38, 0x9a, 0x67, 0x7c, 0x89, 0x93, 0x2c, 0x4f, 0x55, 0x4a,
+	0x2f, 0xcb, 0x80, 0x34, 0x01, 0xa9, 0x03, 0xec, 0x3b, 0x3c, 0x9d, 0xe2, 0x6e, 0x21, 0x31, 0xbf,
+	0x45, 0xc5, 0x45, 0x2c, 0x29, 0x85, 0xb3, 0x84, 0x6f, 0x71, 0x48, 0x46, 0x64, 0xdc, 0x0b, 0xcd,
+	0x37, 0x7d, 0x01, 0xe7, 0xb8, 0xe5, 0x22, 0x1e, 0x7a, 0x06, 0x2c, 0x0f, 0x34, 0x80, 0x6e, 0xc6,
+	0xa5, 0xdc, 0xa5, 0x79, 0x34, 0xec, 0x98, 0xc0, 0xfe, 0xcc, 0x3e, 0x02, 0xd5, 0xa4, 0x37, 0x39,
+	0x72, 0x25, 0xd2, 0x64, 0xae, 0xb8, 0x2a, 0x24, 0x1d, 0x41, 0xbf, 0xa8, 0x51, 0x8c, 0x8c, 0x44,
+	0x37, 0xb4, 0x21, 0x76, 0x03, 0x83, 0xea, 0x5e, 0x84, 0x89, 0x12, 0x3c, 0x96, 0x8d, 0x38, 0x39,
+	0x25, 0xee, 0xb5, 0xc4, 0xff, 0x10, 0xb8, 0xb8, 0x4b, 0xd7, 0x22, 0x09, 0x51, 0x66, 0x69, 0x22,
+	0x51, 0x0b, 0xc7, 0x1a, 0x28, 0x7d, 0xd4, 0xc2, 0x16, 0xb4, 0x2f, 0xdb, 0xb3, 0xca, 0x7e, 0x06,
+	0x9d, 0x42, 0xd4, 0xb5, 0xe9, 0x4f, 0xcd, 0xc3, 0x97, 0x4b, 0x94, 0xf2, 0x21, 0xfd, 0x85, 0xc9,
+	0xf0, 0xcc, 0x44, 0x6c, 0x88, 0x32, 0xf0, 0x73, 0x5c, 0xe5, 0x28, 0x37, 0x65, 0xca, 0xb9, 0x49,
+	0x39, 0xc0, 0xd8, 0x37, 0x78, 0x1e, 0x5a, 0xe7, 0xba, 0xf3, 0x95, 0x1c, 0x69, 0xe4, 0xda, 0x64,
+	0x9e, 0x83, 0x6c, 0x06, 0xbd, 0x29, 0xee, 0xcc, 0xb7, 0x6c, 0xfb, 0x23, 0x8f, 0xfb, 0x73, 0x51,
+	0xfe, 0x26, 0xd0, 0xff, 0x22, 0x62, 0x9c, 0xe3, 0x7a, 0x8b, 0x89, 0x72, 0x18, 0x0b, 0xa0, 0xbb,
+	0x12, 0x31, 0x4e, 0x9b, 0x8e, 0xed, 0xcf, 0x6d, 0x0f, 0x9d, 0x63, 0x0f, 0x63, 0x18, 0xac, 0x1a,
+	0xfa, 0x5b, 0xae, 0xb8, 0xe9, 0xa4, 0x1f, 0xb6, 0x61, 0x76, 0x0d, 0xfe, 0x22, 0x8b, 0x53, 0x1e,
+	0x55, 0xaf, 0xc4, 0xc0, 0x2f, 0xac, 0x73, 0xf5, 0x90, 0x07, 0x18, 0xfb, 0x0c, 0x7d, 0x7b, 0x9e,
+	0x8f, 0xcd, 0xb7, 0x0c, 0x7a, 0x47, 0x06, 0xd9, 0xa7, 0xb2, 0xfe, 0xff, 0xad, 0xc4, 0x15, 0xf4,
+	0x96, 0xe5, 0xcc, 0xde, 0xd7, 0x14, 0x0d, 0x70, 0xfd, 0xb7, 0x03, 0x97, 0x8b, 0xf6, 0x16, 0xd2,
+	0x1f, 0x30, 0x08, 0x71, 0x2d, 0xa4, 0xc2, 0xbc, 0x5a, 0x3a, 0xfa, 0x66, 0x72, 0xb4, 0x93, 0x93,
+	0xc3, 0x85, 0x0c, 0xde, 0x3a, 0x52, 0x1c, 0xbb, 0x35, 0x83, 0x9e, 0x99, 0x79, 0x43, 0xcb, 0x4e,
+	0xdf, 0xa9, 0xf7, 0x2a, 0x18, 0x39, 0x72, 0x0e, 0xb7, 0xe6, 0x01, 0xfc, 0xaf, 0xa8, 0x9a, 0xe9,
+	0x7a, 0xe7, 0xb8, 0xe1, 0x18, 0xe4, 0xe0, 0xca, 0x5d, 0x54, 0xc5, 0x72, 0x0f, 0x50, 0xbe, 0xa9,
+	0x6e, 0x31, 0x7d, 0xe5, 0xc8, 0xb5, 0x66, 0x2f, 0x78, 0xed, 0xaa, 0xc4, 0x7a, 0xee, 0x31, 0xa1,
+	0x33, 0xb8, 0xb8, 0x13, 0x52, 0xe9, 0xfa, 0xf4, 0x4d, 0xe9, 0xe4, 0xb4, 0x3b, 0x7a, 0x4a, 0xb3,
+	0x8a, 0xbf, 0x27, 0x3f, 0x9f, 0x98, 0x1f, 0xe6, 0x87, 0x7f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x4a,
+	0xe2, 0x24, 0xc3, 0x4b, 0x05, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -285,6 +593,9 @@ const _ = grpc.SupportPackageIsVersion6
 type UnitedShieldSpaceClient interface {
 	RegisterNewUser(ctx context.Context, in *NewUserDetails, opts ...grpc.CallOption) (*UserCreationStatus, error)
 	LoginUser(ctx context.Context, in *UserCredentials, opts ...grpc.CallOption) (*LoginResponse, error)
+	GetNewTokens(ctx context.Context, in *RefreshTokenDetails, opts ...grpc.CallOption) (*NewTokens, error)
+	UploadFile(ctx context.Context, opts ...grpc.CallOption) (UnitedShieldSpace_UploadFileClient, error)
+	ListUserFiles(ctx context.Context, in *UserDetails, opts ...grpc.CallOption) (UnitedShieldSpace_ListUserFilesClient, error)
 }
 
 type unitedShieldSpaceClient struct {
@@ -313,10 +624,88 @@ func (c *unitedShieldSpaceClient) LoginUser(ctx context.Context, in *UserCredent
 	return out, nil
 }
 
+func (c *unitedShieldSpaceClient) GetNewTokens(ctx context.Context, in *RefreshTokenDetails, opts ...grpc.CallOption) (*NewTokens, error) {
+	out := new(NewTokens)
+	err := c.cc.Invoke(ctx, "/unitedshieldspace.UnitedShieldSpace/GetNewTokens", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *unitedShieldSpaceClient) UploadFile(ctx context.Context, opts ...grpc.CallOption) (UnitedShieldSpace_UploadFileClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_UnitedShieldSpace_serviceDesc.Streams[0], "/unitedshieldspace.UnitedShieldSpace/UploadFile", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &unitedShieldSpaceUploadFileClient{stream}
+	return x, nil
+}
+
+type UnitedShieldSpace_UploadFileClient interface {
+	Send(*FileSegment) error
+	CloseAndRecv() (*UploadStatus, error)
+	grpc.ClientStream
+}
+
+type unitedShieldSpaceUploadFileClient struct {
+	grpc.ClientStream
+}
+
+func (x *unitedShieldSpaceUploadFileClient) Send(m *FileSegment) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *unitedShieldSpaceUploadFileClient) CloseAndRecv() (*UploadStatus, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(UploadStatus)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *unitedShieldSpaceClient) ListUserFiles(ctx context.Context, in *UserDetails, opts ...grpc.CallOption) (UnitedShieldSpace_ListUserFilesClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_UnitedShieldSpace_serviceDesc.Streams[1], "/unitedshieldspace.UnitedShieldSpace/ListUserFiles", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &unitedShieldSpaceListUserFilesClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type UnitedShieldSpace_ListUserFilesClient interface {
+	Recv() (*FileDetails, error)
+	grpc.ClientStream
+}
+
+type unitedShieldSpaceListUserFilesClient struct {
+	grpc.ClientStream
+}
+
+func (x *unitedShieldSpaceListUserFilesClient) Recv() (*FileDetails, error) {
+	m := new(FileDetails)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // UnitedShieldSpaceServer is the server API for UnitedShieldSpace service.
 type UnitedShieldSpaceServer interface {
 	RegisterNewUser(context.Context, *NewUserDetails) (*UserCreationStatus, error)
 	LoginUser(context.Context, *UserCredentials) (*LoginResponse, error)
+	GetNewTokens(context.Context, *RefreshTokenDetails) (*NewTokens, error)
+	UploadFile(UnitedShieldSpace_UploadFileServer) error
+	ListUserFiles(*UserDetails, UnitedShieldSpace_ListUserFilesServer) error
 }
 
 // UnimplementedUnitedShieldSpaceServer can be embedded to have forward compatible implementations.
@@ -328,6 +717,15 @@ func (*UnimplementedUnitedShieldSpaceServer) RegisterNewUser(ctx context.Context
 }
 func (*UnimplementedUnitedShieldSpaceServer) LoginUser(ctx context.Context, req *UserCredentials) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoginUser not implemented")
+}
+func (*UnimplementedUnitedShieldSpaceServer) GetNewTokens(ctx context.Context, req *RefreshTokenDetails) (*NewTokens, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetNewTokens not implemented")
+}
+func (*UnimplementedUnitedShieldSpaceServer) UploadFile(srv UnitedShieldSpace_UploadFileServer) error {
+	return status.Errorf(codes.Unimplemented, "method UploadFile not implemented")
+}
+func (*UnimplementedUnitedShieldSpaceServer) ListUserFiles(req *UserDetails, srv UnitedShieldSpace_ListUserFilesServer) error {
+	return status.Errorf(codes.Unimplemented, "method ListUserFiles not implemented")
 }
 
 func RegisterUnitedShieldSpaceServer(s *grpc.Server, srv UnitedShieldSpaceServer) {
@@ -370,6 +768,71 @@ func _UnitedShieldSpace_LoginUser_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UnitedShieldSpace_GetNewTokens_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RefreshTokenDetails)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UnitedShieldSpaceServer).GetNewTokens(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/unitedshieldspace.UnitedShieldSpace/GetNewTokens",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UnitedShieldSpaceServer).GetNewTokens(ctx, req.(*RefreshTokenDetails))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UnitedShieldSpace_UploadFile_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(UnitedShieldSpaceServer).UploadFile(&unitedShieldSpaceUploadFileServer{stream})
+}
+
+type UnitedShieldSpace_UploadFileServer interface {
+	SendAndClose(*UploadStatus) error
+	Recv() (*FileSegment, error)
+	grpc.ServerStream
+}
+
+type unitedShieldSpaceUploadFileServer struct {
+	grpc.ServerStream
+}
+
+func (x *unitedShieldSpaceUploadFileServer) SendAndClose(m *UploadStatus) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *unitedShieldSpaceUploadFileServer) Recv() (*FileSegment, error) {
+	m := new(FileSegment)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func _UnitedShieldSpace_ListUserFiles_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(UserDetails)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(UnitedShieldSpaceServer).ListUserFiles(m, &unitedShieldSpaceListUserFilesServer{stream})
+}
+
+type UnitedShieldSpace_ListUserFilesServer interface {
+	Send(*FileDetails) error
+	grpc.ServerStream
+}
+
+type unitedShieldSpaceListUserFilesServer struct {
+	grpc.ServerStream
+}
+
+func (x *unitedShieldSpaceListUserFilesServer) Send(m *FileDetails) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 var _UnitedShieldSpace_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "unitedshieldspace.UnitedShieldSpace",
 	HandlerType: (*UnitedShieldSpaceServer)(nil),
@@ -382,7 +845,22 @@ var _UnitedShieldSpace_serviceDesc = grpc.ServiceDesc{
 			MethodName: "LoginUser",
 			Handler:    _UnitedShieldSpace_LoginUser_Handler,
 		},
+		{
+			MethodName: "GetNewTokens",
+			Handler:    _UnitedShieldSpace_GetNewTokens_Handler,
+		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "UploadFile",
+			Handler:       _UnitedShieldSpace_UploadFile_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "ListUserFiles",
+			Handler:       _UnitedShieldSpace_ListUserFiles_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "unitedShieldSpace.proto",
 }

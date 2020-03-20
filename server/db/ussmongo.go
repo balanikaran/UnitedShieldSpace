@@ -11,6 +11,7 @@ import (
 	"github.com/krnblni/UnitedShieldSpace/server/models"
 	"github.com/krnblni/UnitedShieldSpace/server/utils"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"google.golang.org/grpc/codes"
@@ -58,6 +59,21 @@ func getUsersDbCollection() (*mongo.Collection, error) {
 	userDb := client.Database(dbName).Collection(dbUserCollectionName)
 
 	return userDb, nil
+}
+
+func getFilesDbCollection() (*mongo.Collection, error) {
+	client, err := getMongoClient()
+	if err != nil {
+		ussLogger.Println(err)
+		return nil, err
+	}
+
+	// get users collection from ussDb
+	dbName := utils.GetEnvAsString("MONGO_DB_NAME", "")
+	dbUserCollectionName := utils.GetEnvAsString("MONGO_DB_FILES_COLLECTION_NAME", "")
+	filesDb := client.Database(dbName).Collection(dbUserCollectionName)
+
+	return filesDb, nil
 }
 
 // CreateNewUser -
@@ -120,4 +136,55 @@ func FetchUserByEmail(email string) (models.User, error) {
 	}
 
 	return result, nil
+}
+
+// FetchUserByUID -
+func FetchUserByUID(uid string) (models.User, error) {
+	ussLogger.Println("Uid: ", uid)
+	userDb, err := getUsersDbCollection()
+	if err != nil {
+		ussLogger.Println("unable to get db collection", err)
+		return models.User{}, status.Error(codes.Internal, "internal server error")
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	// get user
+	var result models.User
+	objID, _ := primitive.ObjectIDFromHex(uid)
+	err = userDb.FindOne(ctx, bson.M{"_id": objID}).Decode(&result)
+	if err != nil {
+		ussLogger.Println(err)
+		return models.User{}, err
+	}
+
+	return result, nil
+}
+
+// CreateNewFileNode - 
+func CreateNewFileNode(fileNode *models.FileNode) bool {
+	filesDb, err := getFilesDbCollection()
+	if err != nil {
+		ussLogger.Println("Unable to get files db collection - ", err)
+		return false
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	// add file to database files collection
+	result, err := filesDb.InsertOne(ctx, fileNode)
+	if err != nil {
+		mongoErr := err.(mongo.WriteException)
+		if mongoErr.WriteErrors[0].Code == 11000 {
+			ussLogger.Println("filenode already exists", err)
+			return true
+		}
+		ussLogger.Println("could not add new filenode to database", err)
+		return false
+	}
+
+	ussLogger.Println("Added a new file. ResultID: ", result.InsertedID)
+	return true
 }
