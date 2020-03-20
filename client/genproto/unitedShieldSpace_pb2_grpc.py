@@ -34,6 +34,11 @@ class UnitedShieldSpaceStub(object):
         request_serializer=unitedShieldSpace__pb2.FileSegment.SerializeToString,
         response_deserializer=unitedShieldSpace__pb2.UploadStatus.FromString,
         )
+    self.ListUserFiles = channel.unary_stream(
+        '/unitedshieldspace.UnitedShieldSpace/ListUserFiles',
+        request_serializer=unitedShieldSpace__pb2.UserDetails.SerializeToString,
+        response_deserializer=unitedShieldSpace__pb2.FileDetails.FromString,
+        )
 
 
 class UnitedShieldSpaceServicer(object):
@@ -68,6 +73,13 @@ class UnitedShieldSpaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def ListUserFiles(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_UnitedShieldSpaceServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -90,6 +102,11 @@ def add_UnitedShieldSpaceServicer_to_server(servicer, server):
           servicer.UploadFile,
           request_deserializer=unitedShieldSpace__pb2.FileSegment.FromString,
           response_serializer=unitedShieldSpace__pb2.UploadStatus.SerializeToString,
+      ),
+      'ListUserFiles': grpc.unary_stream_rpc_method_handler(
+          servicer.ListUserFiles,
+          request_deserializer=unitedShieldSpace__pb2.UserDetails.FromString,
+          response_serializer=unitedShieldSpace__pb2.FileDetails.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

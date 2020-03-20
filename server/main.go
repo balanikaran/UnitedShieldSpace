@@ -79,6 +79,7 @@ func (u *ussServer) UploadFile(stream unitedShieldSpace.UnitedShieldSpace_Upload
 	}
 
 	clientFileName := fileSegmentWithToken.GetFileName()
+	userEmail := fileSegmentWithToken.GetEmail()
 	userID := fileSegmentWithToken.GetUid()
 
 	_, filename, _, _ := runtime.Caller(0)
@@ -102,7 +103,7 @@ func (u *ussServer) UploadFile(stream unitedShieldSpace.UnitedShieldSpace_Upload
 			}
 
 			// now here we can start to upload file to firebase storage
-			firebaseUploadStatus := firebase.UplaodFileToStorage(tempFile.Name(), clientFileName, userID)
+			firebaseUploadStatus := firebase.UplaodFileToStorage(tempFile.Name(), clientFileName, userEmail)
 
 			if !firebaseUploadStatus {
 				return status.Error(codes.Internal, "internal server error")
@@ -111,8 +112,8 @@ func (u *ussServer) UploadFile(stream unitedShieldSpace.UnitedShieldSpace_Upload
 			// here means firebase file uploaded
 			// create node
 			node := &models.FileNode{
-				ID:    userID + clientFileName,
-				Owner: userID,
+				ID:    userEmail + userID + clientFileName,
+				Owner: userEmail,
 				Name:  clientFileName,
 				ACL:   make([]string, 0),
 				Created: time.Now().Unix(),
@@ -154,6 +155,38 @@ func (u *ussServer) GetNewTokens(ctx context.Context, refreshTokenDetails *unite
 	// here means refresh token is valid
 	// generate new tokens
 	return auth.RenewTokens(refreshTokenDetails.GetUid())
+}
+
+func (u *ussServer) ListUserFiles(userDetails *unitedShieldSpace.UserDetails, stream unitedShieldSpace.UnitedShieldSpace_ListUserFilesServer) error {
+	ussLogger.Println("List user files was called...")
+	// verify access token here first
+	authStatus := auth.VerifyAccessToken(userDetails.GetAccessToken())
+	if authStatus == codes.Unauthenticated {
+		return status.Error(codes.Unauthenticated, "invalid access token")
+	}
+
+	userFilesList, err := db.FetchUserFiles(userDetails.GetEmail())
+	if err != nil {
+		return status.Error(codes.Internal, "internal server error")
+	}
+
+	if len(userFilesList) == 0 {
+		return status.Error(codes.NotFound, "no files found")
+	}
+
+	for _, userFile := range userFilesList {
+		fileDetail := &unitedShieldSpace.FileDetails{
+			Name: userFile.Name,
+			CreatedOn: userFile.Created,
+		}
+		ussLogger.Println(fileDetail)
+		if err := stream.Send(fileDetail); err != nil {
+			ussLogger.Println("error sending the file details", err)
+			return status.Error(codes.Internal, "internal server error")
+		}
+	}
+
+	return nil
 }
 
 func main() {

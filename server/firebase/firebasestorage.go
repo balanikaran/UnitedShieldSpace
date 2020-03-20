@@ -16,7 +16,7 @@ import (
 var ussLogger = logger.GetInstance()
 
 // UplaodFileToStorage -
-func UplaodFileToStorage(clientTempFileName string, clientFileName string, userID string) bool {
+func UplaodFileToStorage(clientTempFileName string, clientFileName string, userEmail string) bool {
 
 	// appending enc extension to filename
 	clientFileName = clientFileName + ".enc"
@@ -59,7 +59,7 @@ func UplaodFileToStorage(clientTempFileName string, clientFileName string, userI
 	}
 
 	ussLogger.Println("client file name - ", clientFileName)
-	wc := bucket.Object(userID + "/" + clientFileName).NewWriter(context.Background())
+	wc := bucket.Object(userEmail + "/" + clientFileName).NewWriter(context.Background())
 	wc.ContentType = "text/plain"
 
 	if _, err := io.Copy(wc, clientFile); err != nil {

@@ -9,6 +9,7 @@ import os
 from queue import Queue
 from grpc import StatusCode
 from client.communication.fileOperations import UploadFile
+import client.screens.homeScreen as homeScreen
 
 
 class UssMenu(tk.Menu):
@@ -21,6 +22,7 @@ class UssMenu(tk.Menu):
         # Name = File
         fileMenu = tk.Menu(self)
         fileMenu.add_command(label="Upload File", command=self.openNewUploadFile)
+        fileMenu.add_command(label="Refresh", command=self.refreshMasterFrame)
         fileMenu.add_separator()
         fileMenu.add_command(label="Quit", command=self.quitApp)
 
@@ -48,7 +50,6 @@ class UssMenu(tk.Menu):
         else:
             GenericDialog(self.root, title="Database Error!",
                           message="Unable to remove login info!\nProgram will exit now.")
-            self.root.quit()
 
     def quitApp(self):
         self.root.quit()
@@ -68,7 +69,7 @@ class UssMenu(tk.Menu):
 
     def openNewUploadFile(self):
         fileTypes = [("Text Documents", "*.txt")]
-        dialog = filedialog.Open(master=self.master, filetypes=fileTypes)
+        dialog = filedialog.Open(master=self.root, filetypes=fileTypes)
         self.disableMenuBar()
         self.filePath = dialog.show()
 
@@ -77,7 +78,7 @@ class UssMenu(tk.Menu):
             self.fileStats = os.stat(self.filePath)
             print("size in bytes = ", self.fileStats.st_size)
             if self.fileStats.st_size > 5242880:
-                GenericDialog(master=self.master, title="Size Error!", message="Max file size allowed: 5MB")
+                GenericDialog(master=self.root, title="Size Error!", message="Max file size allowed: 5MB")
                 self.enableMenuBar()
             else:
                 # start uploading file
@@ -88,7 +89,7 @@ class UssMenu(tk.Menu):
 
     def initiateFileUpload(self, filePath):
         self.queue = Queue()
-        self.waitDialog = StickyDialog(self.master, message="Please wait, uploading...")
+        self.waitDialog = StickyDialog(self.root, message="Please wait, uploading...")
         fileUploadThread = UploadFile(self.queue, filePath)
         fileUploadThread.start()
         self.master.after(100, self.checkQueueForUploadStatus)
@@ -104,13 +105,17 @@ class UssMenu(tk.Menu):
 
     def afterFileUploadResponse(self):
         if self.uploadStatusResponse == StatusCode.INTERNAL:
-            GenericDialog(self.master, title="Error!", message="Internal server error!")
+            GenericDialog(self.root, title="Error!", message="Internal server error!")
         elif self.uploadStatusResponse == StatusCode.UNAVAILABLE:
-            GenericDialog(self.master, title="Error!", message="Server not available!")
+            GenericDialog(self.root, title="Error!", message="Server not available!")
         elif self.uploadStatusResponse == StatusCode.UNAUTHENTICATED:
             self.signOut()
         elif self.uploadStatusResponse == StatusCode.OK:
-            GenericDialog(self.master, title="Success!", message="File Uploaded Successfully!")
+            GenericDialog(self.root, title="Success!", message="File Uploaded Successfully!\nPlease refresh!")
         else:
-            GenericDialog(self.master, title="Error!", message="Error code: " + self.uploadStatusResponse.code())
+            GenericDialog(self.root, title="Error!", message="Error code: " + self.uploadStatusResponse)
         self.enableMenuBar()
+
+    def refreshMasterFrame(self):
+        self.masterFrame.destroy()
+        loginScreen.LoginScreen(self.root)
