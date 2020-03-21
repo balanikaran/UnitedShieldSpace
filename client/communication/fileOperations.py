@@ -233,3 +233,79 @@ class GetSharedWithMeFileList(Thread):
             else:
                 print("some other error occurred with old tokens...", rpcError.code())
                 self.queue.put(rpcError.code())
+
+
+class UpdateFileACL(Thread):
+    def __init__(self, queue: Queue, owner: str, name: str, grant: bool, toEmail: str, *args, **kwargs):
+        super().__init__(*args, *kwargs)
+        self.queue = queue
+        self.owner = owner
+        self.name = name
+        self.toEmail = toEmail
+        self.grant = grant
+        self.user = GetUser.get()
+        (self.accessToken, self.refreshToken) = GetTokens().get()
+
+        self.ACLUpdateResponse = None
+
+    def run(self):
+        channel = grpc.insecure_channel(serverAddress + ":" + serverPort)
+        stub = unitedShieldSpace.UnitedShieldSpaceStub(channel)
+        try:
+            print("trying to update ACL with old tokens...")
+            self.ACLUpdateResponse = stub.UpdateACL(
+                ussPb.ACLDetails(owner=self.owner, name=self.name, toEmail=self.toEmail, grant=self.grant,
+                                 accessToken=self.accessToken))
+
+            print(self.ACLUpdateResponse)
+            if self.ACLUpdateResponse.ACLUpdateStatus:
+                self.queue.put(StatusCode.OK)
+
+        except grpc.RpcError as rpcError:
+            print("exception occurred with old tokens...")
+            print(rpcError.code())
+
+            if rpcError.code() == StatusCode.UNAUTHENTICATED:
+                print("invalid access token...")
+
+                try:
+                    print("trying to get new tokens...")
+                    newTokensResponse = stub.GetNewTokens(
+                        ussPb.RefreshTokenDetails(uid=self.user.userId, refreshToken=self.refreshToken))
+                    print("new tokens :", newTokensResponse)
+                    if UpdateTokens().update(newTokensResponse.accessToken, newTokensResponse.refreshToken):
+                        self.accessToken = newTokensResponse.accessToken
+                        self.refreshToken = newTokensResponse.refreshToken
+
+                        try:
+
+                            self.ACLUpdateResponse = stub.UpdateACL(
+                                ussPb.ACLDetails(owner=self.owner, name=self.name, toEmail=self.toEmail,
+                                                 grant=self.grant,
+                                                 accessToken=self.accessToken))
+                            print(self.ACLUpdateResponse)
+                            if self.ACLUpdateResponse.ACLUpdateStatus:
+                                self.queue.put(StatusCode.OK)
+
+                        except grpc.RpcError as rpcError:
+                            print("error occurred with new tokens...")
+                            print(rpcError.code())
+                            self.queue.put(rpcError.code())
+                    else:
+                        print("here unable to update tokens")
+                        self.queue.put(StatusCode.UNAUTHENTICATED)
+
+                except grpc.RpcError as rpcError:
+                    print("exception occurred with ref token...")
+                    print(rpcError.code())
+
+                    if rpcError.code() == StatusCode.UNAUTHENTICATED:
+                        print("invalid ref token, perform signout...")
+                        self.queue.put(StatusCode.UNAUTHENTICATED)
+                    else:
+                        print("some other error occured while trying to get new tokens, perform signout...")
+                        self.queue.put(rpcError.code())
+
+            else:
+                print("some other error occurred with old tokens...", rpcError.code())
+                self.queue.put(rpcError.code())

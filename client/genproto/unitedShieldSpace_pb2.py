@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='unitedshieldspace',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x17unitedShieldSpace.proto\x12\x11unitedshieldspace\"?\n\x0eNewUserDetails\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\")\n\x12UserCreationStatus\x12\x13\n\x0buserCreated\x18\x01 \x01(\x08\"2\n\x0fUserCredentials\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"j\n\rLoginResponse\x12\x13\n\x0bloginStatus\x18\x01 \x01(\x08\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0b\n\x03uid\x18\x03 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x04 \x01(\t\x12\x14\n\x0crefreshToken\x18\x05 \x01(\t\"8\n\x13RefreshTokenDetails\x12\x0b\n\x03uid\x18\x01 \x01(\t\x12\x14\n\x0crefreshToken\x18\x02 \x01(\t\"6\n\tNewTokens\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x01 \x01(\t\x12\x14\n\x0crefreshToken\x18\x02 \x01(\t\"i\n\x0b\x46ileSegment\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x0b\n\x03uid\x18\x02 \x01(\t\x12\x10\n\x08\x66ileName\x18\x03 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x04 \x01(\t\x12\x17\n\x0f\x66ileSegmentData\x18\x05 \x01(\x0c\"$\n\x0cUploadStatus\x12\x14\n\x0cuploadStatus\x18\x01 \x01(\x08\"1\n\x0bUserDetails\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x02 \x01(\t\".\n\x0b\x46ileDetails\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tcreatedOn\x18\x02 \x01(\x03\"@\n\x0e\x45xtFileDetails\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05owner\x18\x02 \x01(\t\x12\x11\n\tcreatedOn\x18\x03 \x01(\x03\x32\x9b\x04\n\x11UnitedShieldSpace\x12[\n\x0fRegisterNewUser\x12!.unitedshieldspace.NewUserDetails\x1a%.unitedshieldspace.UserCreationStatus\x12Q\n\tLoginUser\x12\".unitedshieldspace.UserCredentials\x1a .unitedshieldspace.LoginResponse\x12T\n\x0cGetNewTokens\x12&.unitedshieldspace.RefreshTokenDetails\x1a\x1c.unitedshieldspace.NewTokens\x12O\n\nUploadFile\x12\x1e.unitedshieldspace.FileSegment\x1a\x1f.unitedshieldspace.UploadStatus(\x01\x12Q\n\rListUserFiles\x12\x1e.unitedshieldspace.UserDetails\x1a\x1e.unitedshieldspace.FileDetails0\x01\x12\\\n\x15ListSharedWithMeFiles\x12\x1e.unitedshieldspace.UserDetails\x1a!.unitedshieldspace.ExtFileDetails0\x01\x62\x06proto3'
+  serialized_pb=b'\n\x17unitedShieldSpace.proto\x12\x11unitedshieldspace\"?\n\x0eNewUserDetails\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\")\n\x12UserCreationStatus\x12\x13\n\x0buserCreated\x18\x01 \x01(\x08\"2\n\x0fUserCredentials\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"j\n\rLoginResponse\x12\x13\n\x0bloginStatus\x18\x01 \x01(\x08\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0b\n\x03uid\x18\x03 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x04 \x01(\t\x12\x14\n\x0crefreshToken\x18\x05 \x01(\t\"8\n\x13RefreshTokenDetails\x12\x0b\n\x03uid\x18\x01 \x01(\t\x12\x14\n\x0crefreshToken\x18\x02 \x01(\t\"6\n\tNewTokens\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x01 \x01(\t\x12\x14\n\x0crefreshToken\x18\x02 \x01(\t\"i\n\x0b\x46ileSegment\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x0b\n\x03uid\x18\x02 \x01(\t\x12\x10\n\x08\x66ileName\x18\x03 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x04 \x01(\t\x12\x17\n\x0f\x66ileSegmentData\x18\x05 \x01(\x0c\"$\n\x0cUploadStatus\x12\x14\n\x0cuploadStatus\x18\x01 \x01(\x08\"1\n\x0bUserDetails\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x02 \x01(\t\".\n\x0b\x46ileDetails\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tcreatedOn\x18\x02 \x01(\x03\"@\n\x0e\x45xtFileDetails\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05owner\x18\x02 \x01(\t\x12\x11\n\tcreatedOn\x18\x03 \x01(\x03\"^\n\nACLDetails\x12\r\n\x05owner\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0f\n\x07toEmail\x18\x03 \x01(\t\x12\r\n\x05grant\x18\x04 \x01(\x08\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x05 \x01(\t\",\n\x11\x41\x43LUpdateResponse\x12\x17\n\x0f\x41\x43LUpdateStatus\x18\x01 \x01(\x08\x32\xed\x04\n\x11UnitedShieldSpace\x12[\n\x0fRegisterNewUser\x12!.unitedshieldspace.NewUserDetails\x1a%.unitedshieldspace.UserCreationStatus\x12Q\n\tLoginUser\x12\".unitedshieldspace.UserCredentials\x1a .unitedshieldspace.LoginResponse\x12T\n\x0cGetNewTokens\x12&.unitedshieldspace.RefreshTokenDetails\x1a\x1c.unitedshieldspace.NewTokens\x12O\n\nUploadFile\x12\x1e.unitedshieldspace.FileSegment\x1a\x1f.unitedshieldspace.UploadStatus(\x01\x12Q\n\rListUserFiles\x12\x1e.unitedshieldspace.UserDetails\x1a\x1e.unitedshieldspace.FileDetails0\x01\x12\\\n\x15ListSharedWithMeFiles\x12\x1e.unitedshieldspace.UserDetails\x1a!.unitedshieldspace.ExtFileDetails0\x01\x12P\n\tUpdateACL\x12\x1d.unitedshieldspace.ACLDetails\x1a$.unitedshieldspace.ACLUpdateResponseb\x06proto3'
 )
 
 
@@ -483,6 +483,96 @@ _EXTFILEDETAILS = _descriptor.Descriptor(
   serialized_end=736,
 )
 
+
+_ACLDETAILS = _descriptor.Descriptor(
+  name='ACLDetails',
+  full_name='unitedshieldspace.ACLDetails',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='owner', full_name='unitedshieldspace.ACLDetails.owner', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='unitedshieldspace.ACLDetails.name', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='toEmail', full_name='unitedshieldspace.ACLDetails.toEmail', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='grant', full_name='unitedshieldspace.ACLDetails.grant', index=3,
+      number=4, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='accessToken', full_name='unitedshieldspace.ACLDetails.accessToken', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=738,
+  serialized_end=832,
+)
+
+
+_ACLUPDATERESPONSE = _descriptor.Descriptor(
+  name='ACLUpdateResponse',
+  full_name='unitedshieldspace.ACLUpdateResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='ACLUpdateStatus', full_name='unitedshieldspace.ACLUpdateResponse.ACLUpdateStatus', index=0,
+      number=1, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=834,
+  serialized_end=878,
+)
+
 DESCRIPTOR.message_types_by_name['NewUserDetails'] = _NEWUSERDETAILS
 DESCRIPTOR.message_types_by_name['UserCreationStatus'] = _USERCREATIONSTATUS
 DESCRIPTOR.message_types_by_name['UserCredentials'] = _USERCREDENTIALS
@@ -494,6 +584,8 @@ DESCRIPTOR.message_types_by_name['UploadStatus'] = _UPLOADSTATUS
 DESCRIPTOR.message_types_by_name['UserDetails'] = _USERDETAILS
 DESCRIPTOR.message_types_by_name['FileDetails'] = _FILEDETAILS
 DESCRIPTOR.message_types_by_name['ExtFileDetails'] = _EXTFILEDETAILS
+DESCRIPTOR.message_types_by_name['ACLDetails'] = _ACLDETAILS
+DESCRIPTOR.message_types_by_name['ACLUpdateResponse'] = _ACLUPDATERESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 NewUserDetails = _reflection.GeneratedProtocolMessageType('NewUserDetails', (_message.Message,), {
@@ -573,6 +665,20 @@ ExtFileDetails = _reflection.GeneratedProtocolMessageType('ExtFileDetails', (_me
   })
 _sym_db.RegisterMessage(ExtFileDetails)
 
+ACLDetails = _reflection.GeneratedProtocolMessageType('ACLDetails', (_message.Message,), {
+  'DESCRIPTOR' : _ACLDETAILS,
+  '__module__' : 'unitedShieldSpace_pb2'
+  # @@protoc_insertion_point(class_scope:unitedshieldspace.ACLDetails)
+  })
+_sym_db.RegisterMessage(ACLDetails)
+
+ACLUpdateResponse = _reflection.GeneratedProtocolMessageType('ACLUpdateResponse', (_message.Message,), {
+  'DESCRIPTOR' : _ACLUPDATERESPONSE,
+  '__module__' : 'unitedShieldSpace_pb2'
+  # @@protoc_insertion_point(class_scope:unitedshieldspace.ACLUpdateResponse)
+  })
+_sym_db.RegisterMessage(ACLUpdateResponse)
+
 
 
 _UNITEDSHIELDSPACE = _descriptor.ServiceDescriptor(
@@ -581,8 +687,8 @@ _UNITEDSHIELDSPACE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=739,
-  serialized_end=1278,
+  serialized_start=881,
+  serialized_end=1502,
   methods=[
   _descriptor.MethodDescriptor(
     name='RegisterNewUser',
@@ -636,6 +742,15 @@ _UNITEDSHIELDSPACE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_USERDETAILS,
     output_type=_EXTFILEDETAILS,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='UpdateACL',
+    full_name='unitedshieldspace.UnitedShieldSpace.UpdateACL',
+    index=6,
+    containing_service=None,
+    input_type=_ACLDETAILS,
+    output_type=_ACLUPDATERESPONSE,
     serialized_options=None,
   ),
 ])

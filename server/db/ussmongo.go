@@ -189,7 +189,7 @@ func CreateNewFileNode(fileNode *models.FileNode) bool {
 	return true
 }
 
-// FetchUserFiles - 
+// FetchUserFiles -
 func FetchUserFiles(userEmail string) ([]models.FileNode, error) {
 	ussLogger.Print("fetching user files. userEmail - ", userEmail)
 	filesDb, err := getFilesDbCollection()
@@ -210,7 +210,7 @@ func FetchUserFiles(userEmail string) ([]models.FileNode, error) {
 
 	var files []models.FileNode
 
-	for result.Next(context.TODO()){
+	for result.Next(context.TODO()) {
 		var f models.FileNode
 		err := result.Decode(&f)
 		if err != nil {
@@ -231,7 +231,7 @@ func FetchUserFiles(userEmail string) ([]models.FileNode, error) {
 	return files, nil
 }
 
-// FetchSharedWithMeFiles - 
+// FetchSharedWithMeFiles -
 func FetchSharedWithMeFiles(userEmail string) ([]models.FileNode, error) {
 	ussLogger.Print("fetching shared with me files. userEmail - ", userEmail)
 	filesDb, err := getFilesDbCollection()
@@ -252,7 +252,7 @@ func FetchSharedWithMeFiles(userEmail string) ([]models.FileNode, error) {
 
 	var files []models.FileNode
 
-	for result.Next(context.TODO()){
+	for result.Next(context.TODO()) {
 		var f models.FileNode
 		err := result.Decode(&f)
 		if err != nil {
@@ -271,4 +271,75 @@ func FetchSharedWithMeFiles(userEmail string) ([]models.FileNode, error) {
 
 	ussLogger.Println(files)
 	return files, nil
+}
+
+// UpdateFileACL -
+func UpdateFileACL(aclDetails *unitedShieldSpace.ACLDetails) (*unitedShieldSpace.ACLUpdateResponse, error) {
+
+	// get files database collection
+	filesDb, err := getFilesDbCollection()
+	if err != nil {
+		ussLogger.Println("Unable to get files db collection - ", err)
+		return &unitedShieldSpace.ACLUpdateResponse{
+			ACLUpdateStatus: false,
+		}, status.Error(codes.Internal, "internal server error")
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	// check if toEmail is valid - FAILED_PRECONDITION
+	_, err = FetchUserByEmail(aclDetails.GetToEmail())
+	if err != nil {
+		ussLogger.Println("unable to get toUser Email - ", err)
+		return &unitedShieldSpace.ACLUpdateResponse{
+			ACLUpdateStatus: false,
+		}, status.Error(codes.FailedPrecondition, "internal server error")
+	}
+
+	// check to GRANT or REVOKE
+	if aclDetails.GetGrant() {
+		// update file acl - GRANT
+		result, err := filesDb.UpdateOne(ctx, bson.M{
+			"owner":     aclDetails.GetOwner(),
+			"name":      aclDetails.GetName(),
+			"ACL.email": bson.M{"$ne": aclDetails.GetToEmail()},
+		}, bson.M{
+			"$addToSet": bson.M{"ACL": bson.M{"email": aclDetails.GetToEmail(), "salt": 1}},
+		})
+		if err != nil {
+			ussLogger.Println("unable to update - ", err)
+			return &unitedShieldSpace.ACLUpdateResponse{
+				ACLUpdateStatus: false,
+			}, status.Error(codes.Internal, "internal server error")
+		}
+
+		ussLogger.Println("update result - ", result)
+
+		return &unitedShieldSpace.ACLUpdateResponse{
+			ACLUpdateStatus: true,
+		}, nil
+
+	}
+
+	// remove user from acl
+	result, err := filesDb.UpdateOne(ctx, bson.M{
+		"owner": aclDetails.GetOwner(),
+		"name":  aclDetails.GetName(),
+	}, bson.M{
+		"$pull": bson.M{"ACL": bson.M{"email": aclDetails.GetToEmail()}},
+	})
+	if err != nil {
+		ussLogger.Println("unable to update - ", err)
+		return &unitedShieldSpace.ACLUpdateResponse{
+			ACLUpdateStatus: false,
+		}, status.Error(codes.Internal, "internal server error")
+	}
+
+	ussLogger.Println("update result - ", result)
+
+	return &unitedShieldSpace.ACLUpdateResponse{
+		ACLUpdateStatus: true,
+	}, nil
+
 }

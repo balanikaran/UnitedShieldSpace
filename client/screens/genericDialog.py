@@ -3,7 +3,7 @@ from client.utils.windowUtils import centerWindow
 
 
 class GenericDialog(tk.Toplevel):
-    def __init__(self, master: tk.Tk, title="Error title", message="Error message"):
+    def __init__(self, master, title="Error title", message="Error message"):
         super().__init__(master)
         self.root = master
         # self.root.config(menu=tk.Menu(self.root))

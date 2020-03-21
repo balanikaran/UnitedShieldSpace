@@ -223,6 +223,21 @@ func (u *ussServer) ListSharedWithMeFiles(userDetails *unitedShieldSpace.UserDet
 	return nil
 }
 
+func (u *ussServer) UpdateACL(ctx context.Context, aclDetails *unitedShieldSpace.ACLDetails) (*unitedShieldSpace.ACLUpdateResponse, error) {
+	
+	// this file segment is meant to contain no file data but tokens only
+	// verify tokens
+	authStatus := auth.VerifyAccessToken(aclDetails.GetAccessToken())
+	if authStatus == codes.Unauthenticated {
+		return &unitedShieldSpace.ACLUpdateResponse{
+			ACLUpdateStatus: false,
+		}, status.Error(codes.Unauthenticated, "invalid access token")
+	}
+
+	// means accesstoken is valid
+	return db.UpdateFileACL(aclDetails)
+}
+
 func main() {
 	// get port number as string
 	port := utils.GetEnvAsString("PORT", "7000")

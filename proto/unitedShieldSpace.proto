@@ -9,6 +9,7 @@ service UnitedShieldSpace {
     rpc UploadFile(stream FileSegment) returns (UploadStatus);
     rpc ListUserFiles(UserDetails) returns (stream FileDetails);
     rpc ListSharedWithMeFiles(UserDetails) returns (stream ExtFileDetails);
+    rpc UpdateACL(ACLDetails) returns (ACLUpdateResponse);
 }
 
 message NewUserDetails {
@@ -70,4 +71,16 @@ message ExtFileDetails {
     string name = 1;
     string owner = 2;
     int64 createdOn = 3;
+}
+
+message ACLDetails {
+    string owner = 1;
+    string name = 2;
+    string toEmail = 3;
+    bool grant = 4;
+    string accessToken = 5;
+}
+
+message ACLUpdateResponse {
+    bool ACLUpdateStatus = 1;
 }

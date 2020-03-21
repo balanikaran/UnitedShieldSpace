@@ -11,6 +11,7 @@ from client.screens.stickyDialog import StickyDialog
 from grpc import StatusCode
 from client.screens.genericDialog import GenericDialog
 import client.screens.loginScreen as loginScreen
+from client.screens.myFilesOptionsDialog import MyFilesOptionsDialog
 
 
 class HomeScreen:
@@ -63,6 +64,7 @@ class HomeScreen:
     def buildMyFilesListBox(self):
         self.myFilesTree = ttk.Treeview(self.myFilesFrame, columns=["owner", "filename", "datecreated"],
                                         show=["headings"], selectmode="browse")
+        self.myFilesTree.bind("<Double-1>", self.openMyFilesOption)
         self.myFilesTree.pack(expand=True, fill=tk.BOTH)
 
         style = ttk.Style(self.frame)
@@ -176,3 +178,9 @@ class HomeScreen:
         for file in self.sharedWithMeFilesResponse:
             value = (file.owner, file.name, file.created)
             self.sharedWithMeFilesTree.insert("", "end", values=value)
+
+    def openMyFilesOption(self, event):
+        print("I was called...")
+        item = self.myFilesTree.selection()[0]
+        values = self.myFilesTree.item(item, "values")
+        MyFilesOptionsDialog(self.frame, fileDetails=values)

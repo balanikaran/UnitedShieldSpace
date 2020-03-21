@@ -44,6 +44,11 @@ class UnitedShieldSpaceStub(object):
         request_serializer=unitedShieldSpace__pb2.UserDetails.SerializeToString,
         response_deserializer=unitedShieldSpace__pb2.ExtFileDetails.FromString,
         )
+    self.UpdateACL = channel.unary_unary(
+        '/unitedshieldspace.UnitedShieldSpace/UpdateACL',
+        request_serializer=unitedShieldSpace__pb2.ACLDetails.SerializeToString,
+        response_deserializer=unitedShieldSpace__pb2.ACLUpdateResponse.FromString,
+        )
 
 
 class UnitedShieldSpaceServicer(object):
@@ -92,6 +97,13 @@ class UnitedShieldSpaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def UpdateACL(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_UnitedShieldSpaceServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -124,6 +136,11 @@ def add_UnitedShieldSpaceServicer_to_server(servicer, server):
           servicer.ListSharedWithMeFiles,
           request_deserializer=unitedShieldSpace__pb2.UserDetails.FromString,
           response_serializer=unitedShieldSpace__pb2.ExtFileDetails.SerializeToString,
+      ),
+      'UpdateACL': grpc.unary_unary_rpc_method_handler(
+          servicer.UpdateACL,
+          request_deserializer=unitedShieldSpace__pb2.ACLDetails.FromString,
+          response_serializer=unitedShieldSpace__pb2.ACLUpdateResponse.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
