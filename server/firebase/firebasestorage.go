@@ -102,23 +102,17 @@ func DownlaodFileFromStorage(name string, owner string) (string, bool) {
 		return "", false
 	}
 
-	ussLogger.Println("app created")
-
 	client, err := app.Storage(context.Background())
 	if err != nil {
 		ussLogger.Println("Unable to create firebase client - ", err)
 		return "", false
 	}
 
-	ussLogger.Println("client created")
-
 	bucket, err := client.DefaultBucket()
 	if err != nil {
 		ussLogger.Println("Unable to get default bucket - ", err)
 		return "", false
 	}
-
-	ussLogger.Println("bucket get")
 
 	ctx := context.Background()
 	ctx, cancel := context.WithTimeout(ctx, time.Second*50)
@@ -131,14 +125,10 @@ func DownlaodFileFromStorage(name string, owner string) (string, bool) {
 	}
 	defer rc.Close()
 
-	ussLogger.Println("rc created - ", rc)
-
 	fileData, err := ioutil.ReadAll(rc)
 	if err != nil {
 		return "", false
 	}
-
-	ussLogger.Println("filedata created - ", fileData)
 
 	// write data to file
 	tempFile, err := ioutil.TempFile(currentPath+"/../tempfiles/", name)
