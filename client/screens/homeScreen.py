@@ -184,9 +184,9 @@ class HomeScreen:
     def openMyFilesOption(self, event):
         item = self.myFilesTree.selection()[0]
         values = self.myFilesTree.item(item, "values")
-        MyFilesOptionsDialog(self.frame, fileDetails=values)
+        MyFilesOptionsDialog(self.frame, fileDetails=values, masterParent=self.root)
 
     def openSharedWithMeFilesOption(self, event):
         item = self.sharedWithMeFilesTree.selection()[0]
         values = self.sharedWithMeFilesTree.item(item, "values")
-        SharedWithMeFilesOptionsDialog(self.frame, fileDetails=values)
+        SharedWithMeFilesOptionsDialog(self.frame, fileDetails=values, masterParent=self.root)
