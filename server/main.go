@@ -113,10 +113,10 @@ func (u *ussServer) UploadFile(stream unitedShieldSpace.UnitedShieldSpace_Upload
 			// here means firebase file uploaded
 			// create node
 			node := &models.FileNode{
-				ID:    userEmail + userID + clientFileName,
-				Owner: userEmail,
-				Name:  clientFileName,
-				ACL:   make([]primitive.D, 0),
+				ID:      userEmail + userID + clientFileName,
+				Owner:   userEmail,
+				Name:    clientFileName,
+				ACL:     make([]primitive.D, 0),
 				Created: time.Now().Unix(),
 			}
 			nodeCreationStatus := db.CreateNewFileNode(node)
@@ -177,7 +177,7 @@ func (u *ussServer) ListUserFiles(userDetails *unitedShieldSpace.UserDetails, st
 
 	for _, userFile := range userFilesList {
 		fileDetail := &unitedShieldSpace.FileDetails{
-			Name: userFile.Name,
+			Name:      userFile.Name,
 			CreatedOn: userFile.Created,
 		}
 		ussLogger.Println(fileDetail)
@@ -209,8 +209,8 @@ func (u *ussServer) ListSharedWithMeFiles(userDetails *unitedShieldSpace.UserDet
 
 	for _, sharedWithMeFile := range sharedWithMeFilesList {
 		extFileDetail := &unitedShieldSpace.ExtFileDetails{
-			Name: sharedWithMeFile.Name,
-			Owner: sharedWithMeFile.Owner,
+			Name:      sharedWithMeFile.Name,
+			Owner:     sharedWithMeFile.Owner,
 			CreatedOn: sharedWithMeFile.Created,
 		}
 		ussLogger.Println(extFileDetail)
@@ -224,7 +224,7 @@ func (u *ussServer) ListSharedWithMeFiles(userDetails *unitedShieldSpace.UserDet
 }
 
 func (u *ussServer) UpdateACL(ctx context.Context, aclDetails *unitedShieldSpace.ACLDetails) (*unitedShieldSpace.ACLUpdateResponse, error) {
-	
+
 	// this file segment is meant to contain no file data but tokens only
 	// verify tokens
 	authStatus := auth.VerifyAccessToken(aclDetails.GetAccessToken())
@@ -236,6 +236,102 @@ func (u *ussServer) UpdateACL(ctx context.Context, aclDetails *unitedShieldSpace
 
 	// means accesstoken is valid
 	return db.UpdateFileACL(aclDetails)
+}
+
+func (u *ussServer) GetFileToken(ctx context.Context, fileTokenParams *unitedShieldSpace.FileTokenParams) (*unitedShieldSpace.FileTokenResponse, error) {
+
+	// verify token
+	authStatus := auth.VerifyAccessToken(fileTokenParams.GetAccessToken())
+	if authStatus == codes.Unauthenticated {
+		return &unitedShieldSpace.FileTokenResponse{
+			FileToken: "",
+		}, status.Error(codes.Unauthenticated, "invalid access token")
+	}
+
+	// means access token is valid
+	fileSalt, err := db.GetFileSalt(fileTokenParams.GetOwner(), fileTokenParams.GetName(), fileTokenParams.GetRequestor())
+	if err != nil {
+		return &unitedShieldSpace.FileTokenResponse{
+			FileToken: "",
+		}, status.Error(codes.Internal, "internal server error")
+	}
+
+	ussLogger.Println("salt used in token creation - ", fileSalt)
+	fileTokenString, err := auth.GetFileTokenWithParams(fileTokenParams.GetOwner(), fileTokenParams.GetRequestor(), fileSalt, fileTokenParams.GetName())
+	if err != nil {
+		return &unitedShieldSpace.FileTokenResponse{
+			FileToken: "",
+		}, status.Error(codes.Internal, "internal server error")
+	}
+
+	return &unitedShieldSpace.FileTokenResponse{
+		FileToken: fileTokenString,
+	}, nil
+}
+
+func (u *ussServer) DownloadFile(requestedFileDetails *unitedShieldSpace.RequestedFileDetails, stream unitedShieldSpace.UnitedShieldSpace_DownloadFileServer) error {
+	// verify token
+	authStatus := auth.VerifyAccessToken(requestedFileDetails.GetAccessToken())
+	if authStatus == codes.Unauthenticated {
+		return status.Error(codes.Unauthenticated, "invalid access token")
+	}
+
+	// get salt from database
+	fileSalt, err := db.GetFileSaltAndIncrease(requestedFileDetails.GetOwner(), requestedFileDetails.GetName(), requestedFileDetails.GetRequestor())
+	if err != nil {
+		return status.Error(codes.Internal, "internal server error")
+	}
+
+	// verify file token
+	fileTokenStatus := auth.VerifyFileToken(requestedFileDetails.GetFileToken(), fileSalt)
+	ussLogger.Println(fileTokenStatus)
+	if fileTokenStatus == codes.Unauthenticated {
+		return status.Error(codes.Unauthenticated, "invalid file access token")
+	}
+
+	// file access token is valid
+	// download file from firebase
+	encFile, downloadStatus := firebase.DownlaodFileFromStorage(requestedFileDetails.GetName(), requestedFileDetails.GetOwner())
+	if !downloadStatus {
+		ussLogger.Println("Unable to download file")
+	}
+
+	ussLogger.Println(encFile)
+	decryptStatus := crypt.DecryptClientFile(encFile)
+
+	if !decryptStatus {
+		return status.Error(codes.Internal, "internal server error")
+	}
+
+	// sending file on stream
+	file, err := os.Open(encFile + ".txt")
+	if err != nil {
+		ussLogger.Println("unable to open decrypted file - ", err)
+		return status.Error(codes.Internal, "internal server error")
+	}
+	defer file.Close()
+
+	defer os.Remove(encFile)
+	defer os.Remove(encFile + ".txt")
+
+	bufferSize := 128
+	buffer := make([]byte, bufferSize)
+
+	for {
+		numberOfBytesRead, err := file.Read(buffer)
+		if err == io.EOF {
+			return nil
+		}
+
+		if err != nil {
+			ussLogger.Println("error reading file - ", err)
+			return status.Error(codes.Internal, "internal server error")
+		}
+
+		stream.Send(&unitedShieldSpace.RequestedFileSegments{
+			FileSegmentData: buffer[:numberOfBytesRead],
+		})
+	}
 }
 
 func main() {

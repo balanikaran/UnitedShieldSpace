@@ -12,6 +12,7 @@ from grpc import StatusCode
 from client.screens.genericDialog import GenericDialog
 import client.screens.loginScreen as loginScreen
 from client.screens.myFilesOptionsDialog import MyFilesOptionsDialog
+from client.screens.sharedWithMeFilesOptionsDialog import SharedWithMeFilesOptionsDialog
 
 
 class HomeScreen:
@@ -129,6 +130,7 @@ class HomeScreen:
     def buildSharedWithMeFilesListBox(self):
         self.sharedWithMeFilesTree = ttk.Treeview(self.sharedWithMeFrame, columns=["owner", "filename", "datecreated"],
                                                   show=["headings"], selectmode="browse")
+        self.sharedWithMeFilesTree.bind("<Double-1>", self.openSharedWithMeFilesOption)
         self.sharedWithMeFilesTree.pack(expand=True, fill=tk.BOTH)
 
         style = ttk.Style(self.frame)
@@ -172,7 +174,7 @@ class HomeScreen:
             GenericDialog(self.root, title="Error!", message="Server not found!")
         else:
             print(self.sharedWithMeFilesResponse)
-            GenericDialog(self.root, title="Error!", message="Error code: ")
+            GenericDialog(self.root, title="Error!", message="Some other error occurred!")
 
     def populateSharedWithMeFilesInTree(self):
         for file in self.sharedWithMeFilesResponse:
@@ -180,7 +182,11 @@ class HomeScreen:
             self.sharedWithMeFilesTree.insert("", "end", values=value)
 
     def openMyFilesOption(self, event):
-        print("I was called...")
         item = self.myFilesTree.selection()[0]
         values = self.myFilesTree.item(item, "values")
         MyFilesOptionsDialog(self.frame, fileDetails=values)
+
+    def openSharedWithMeFilesOption(self, event):
+        item = self.sharedWithMeFilesTree.selection()[0]
+        values = self.sharedWithMeFilesTree.item(item, "values")
+        SharedWithMeFilesOptionsDialog(self.frame, fileDetails=values)

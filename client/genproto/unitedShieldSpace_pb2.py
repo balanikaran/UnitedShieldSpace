@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='unitedshieldspace',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x17unitedShieldSpace.proto\x12\x11unitedshieldspace\"?\n\x0eNewUserDetails\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\")\n\x12UserCreationStatus\x12\x13\n\x0buserCreated\x18\x01 \x01(\x08\"2\n\x0fUserCredentials\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"j\n\rLoginResponse\x12\x13\n\x0bloginStatus\x18\x01 \x01(\x08\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0b\n\x03uid\x18\x03 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x04 \x01(\t\x12\x14\n\x0crefreshToken\x18\x05 \x01(\t\"8\n\x13RefreshTokenDetails\x12\x0b\n\x03uid\x18\x01 \x01(\t\x12\x14\n\x0crefreshToken\x18\x02 \x01(\t\"6\n\tNewTokens\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x01 \x01(\t\x12\x14\n\x0crefreshToken\x18\x02 \x01(\t\"i\n\x0b\x46ileSegment\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x0b\n\x03uid\x18\x02 \x01(\t\x12\x10\n\x08\x66ileName\x18\x03 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x04 \x01(\t\x12\x17\n\x0f\x66ileSegmentData\x18\x05 \x01(\x0c\"$\n\x0cUploadStatus\x12\x14\n\x0cuploadStatus\x18\x01 \x01(\x08\"1\n\x0bUserDetails\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x02 \x01(\t\".\n\x0b\x46ileDetails\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tcreatedOn\x18\x02 \x01(\x03\"@\n\x0e\x45xtFileDetails\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05owner\x18\x02 \x01(\t\x12\x11\n\tcreatedOn\x18\x03 \x01(\x03\"^\n\nACLDetails\x12\r\n\x05owner\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0f\n\x07toEmail\x18\x03 \x01(\t\x12\r\n\x05grant\x18\x04 \x01(\x08\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x05 \x01(\t\",\n\x11\x41\x43LUpdateResponse\x12\x17\n\x0f\x41\x43LUpdateStatus\x18\x01 \x01(\x08\x32\xed\x04\n\x11UnitedShieldSpace\x12[\n\x0fRegisterNewUser\x12!.unitedshieldspace.NewUserDetails\x1a%.unitedshieldspace.UserCreationStatus\x12Q\n\tLoginUser\x12\".unitedshieldspace.UserCredentials\x1a .unitedshieldspace.LoginResponse\x12T\n\x0cGetNewTokens\x12&.unitedshieldspace.RefreshTokenDetails\x1a\x1c.unitedshieldspace.NewTokens\x12O\n\nUploadFile\x12\x1e.unitedshieldspace.FileSegment\x1a\x1f.unitedshieldspace.UploadStatus(\x01\x12Q\n\rListUserFiles\x12\x1e.unitedshieldspace.UserDetails\x1a\x1e.unitedshieldspace.FileDetails0\x01\x12\\\n\x15ListSharedWithMeFiles\x12\x1e.unitedshieldspace.UserDetails\x1a!.unitedshieldspace.ExtFileDetails0\x01\x12P\n\tUpdateACL\x12\x1d.unitedshieldspace.ACLDetails\x1a$.unitedshieldspace.ACLUpdateResponseb\x06proto3'
+  serialized_pb=b'\n\x17unitedShieldSpace.proto\x12\x11unitedshieldspace\"?\n\x0eNewUserDetails\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\")\n\x12UserCreationStatus\x12\x13\n\x0buserCreated\x18\x01 \x01(\x08\"2\n\x0fUserCredentials\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"j\n\rLoginResponse\x12\x13\n\x0bloginStatus\x18\x01 \x01(\x08\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0b\n\x03uid\x18\x03 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x04 \x01(\t\x12\x14\n\x0crefreshToken\x18\x05 \x01(\t\"8\n\x13RefreshTokenDetails\x12\x0b\n\x03uid\x18\x01 \x01(\t\x12\x14\n\x0crefreshToken\x18\x02 \x01(\t\"6\n\tNewTokens\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x01 \x01(\t\x12\x14\n\x0crefreshToken\x18\x02 \x01(\t\"i\n\x0b\x46ileSegment\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x0b\n\x03uid\x18\x02 \x01(\t\x12\x10\n\x08\x66ileName\x18\x03 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x04 \x01(\t\x12\x17\n\x0f\x66ileSegmentData\x18\x05 \x01(\x0c\"$\n\x0cUploadStatus\x12\x14\n\x0cuploadStatus\x18\x01 \x01(\x08\"1\n\x0bUserDetails\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x02 \x01(\t\".\n\x0b\x46ileDetails\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tcreatedOn\x18\x02 \x01(\x03\"@\n\x0e\x45xtFileDetails\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05owner\x18\x02 \x01(\t\x12\x11\n\tcreatedOn\x18\x03 \x01(\x03\"^\n\nACLDetails\x12\r\n\x05owner\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0f\n\x07toEmail\x18\x03 \x01(\t\x12\r\n\x05grant\x18\x04 \x01(\x08\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x05 \x01(\t\",\n\x11\x41\x43LUpdateResponse\x12\x17\n\x0f\x41\x43LUpdateStatus\x18\x01 \x01(\x08\"V\n\x0f\x46ileTokenParams\x12\r\n\x05owner\x18\x01 \x01(\t\x12\x11\n\trequestor\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x04 \x01(\t\"&\n\x11\x46ileTokenResponse\x12\x11\n\tfileToken\x18\x01 \x01(\t\"n\n\x14RequestedFileDetails\x12\x13\n\x0b\x61\x63\x63\x65ssToken\x18\x01 \x01(\t\x12\x11\n\tfileToken\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\r\n\x05owner\x18\x04 \x01(\t\x12\x11\n\trequestor\x18\x05 \x01(\t\"0\n\x15RequestedFileSegments\x12\x17\n\x0f\x66ileSegmentData\x18\x01 \x01(\x0c\x32\xac\x06\n\x11UnitedShieldSpace\x12[\n\x0fRegisterNewUser\x12!.unitedshieldspace.NewUserDetails\x1a%.unitedshieldspace.UserCreationStatus\x12Q\n\tLoginUser\x12\".unitedshieldspace.UserCredentials\x1a .unitedshieldspace.LoginResponse\x12T\n\x0cGetNewTokens\x12&.unitedshieldspace.RefreshTokenDetails\x1a\x1c.unitedshieldspace.NewTokens\x12O\n\nUploadFile\x12\x1e.unitedshieldspace.FileSegment\x1a\x1f.unitedshieldspace.UploadStatus(\x01\x12Q\n\rListUserFiles\x12\x1e.unitedshieldspace.UserDetails\x1a\x1e.unitedshieldspace.FileDetails0\x01\x12\\\n\x15ListSharedWithMeFiles\x12\x1e.unitedshieldspace.UserDetails\x1a!.unitedshieldspace.ExtFileDetails0\x01\x12P\n\tUpdateACL\x12\x1d.unitedshieldspace.ACLDetails\x1a$.unitedshieldspace.ACLUpdateResponse\x12X\n\x0cGetFileToken\x12\".unitedshieldspace.FileTokenParams\x1a$.unitedshieldspace.FileTokenResponse\x12\x63\n\x0c\x44ownloadFile\x12\'.unitedshieldspace.RequestedFileDetails\x1a(.unitedshieldspace.RequestedFileSegments0\x01\x62\x06proto3'
 )
 
 
@@ -573,6 +573,179 @@ _ACLUPDATERESPONSE = _descriptor.Descriptor(
   serialized_end=878,
 )
 
+
+_FILETOKENPARAMS = _descriptor.Descriptor(
+  name='FileTokenParams',
+  full_name='unitedshieldspace.FileTokenParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='owner', full_name='unitedshieldspace.FileTokenParams.owner', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='requestor', full_name='unitedshieldspace.FileTokenParams.requestor', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='unitedshieldspace.FileTokenParams.name', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='accessToken', full_name='unitedshieldspace.FileTokenParams.accessToken', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=880,
+  serialized_end=966,
+)
+
+
+_FILETOKENRESPONSE = _descriptor.Descriptor(
+  name='FileTokenResponse',
+  full_name='unitedshieldspace.FileTokenResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='fileToken', full_name='unitedshieldspace.FileTokenResponse.fileToken', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=968,
+  serialized_end=1006,
+)
+
+
+_REQUESTEDFILEDETAILS = _descriptor.Descriptor(
+  name='RequestedFileDetails',
+  full_name='unitedshieldspace.RequestedFileDetails',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='accessToken', full_name='unitedshieldspace.RequestedFileDetails.accessToken', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fileToken', full_name='unitedshieldspace.RequestedFileDetails.fileToken', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='unitedshieldspace.RequestedFileDetails.name', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='owner', full_name='unitedshieldspace.RequestedFileDetails.owner', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='requestor', full_name='unitedshieldspace.RequestedFileDetails.requestor', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1008,
+  serialized_end=1118,
+)
+
+
+_REQUESTEDFILESEGMENTS = _descriptor.Descriptor(
+  name='RequestedFileSegments',
+  full_name='unitedshieldspace.RequestedFileSegments',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='fileSegmentData', full_name='unitedshieldspace.RequestedFileSegments.fileSegmentData', index=0,
+      number=1, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1120,
+  serialized_end=1168,
+)
+
 DESCRIPTOR.message_types_by_name['NewUserDetails'] = _NEWUSERDETAILS
 DESCRIPTOR.message_types_by_name['UserCreationStatus'] = _USERCREATIONSTATUS
 DESCRIPTOR.message_types_by_name['UserCredentials'] = _USERCREDENTIALS
@@ -586,6 +759,10 @@ DESCRIPTOR.message_types_by_name['FileDetails'] = _FILEDETAILS
 DESCRIPTOR.message_types_by_name['ExtFileDetails'] = _EXTFILEDETAILS
 DESCRIPTOR.message_types_by_name['ACLDetails'] = _ACLDETAILS
 DESCRIPTOR.message_types_by_name['ACLUpdateResponse'] = _ACLUPDATERESPONSE
+DESCRIPTOR.message_types_by_name['FileTokenParams'] = _FILETOKENPARAMS
+DESCRIPTOR.message_types_by_name['FileTokenResponse'] = _FILETOKENRESPONSE
+DESCRIPTOR.message_types_by_name['RequestedFileDetails'] = _REQUESTEDFILEDETAILS
+DESCRIPTOR.message_types_by_name['RequestedFileSegments'] = _REQUESTEDFILESEGMENTS
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 NewUserDetails = _reflection.GeneratedProtocolMessageType('NewUserDetails', (_message.Message,), {
@@ -679,6 +856,34 @@ ACLUpdateResponse = _reflection.GeneratedProtocolMessageType('ACLUpdateResponse'
   })
 _sym_db.RegisterMessage(ACLUpdateResponse)
 
+FileTokenParams = _reflection.GeneratedProtocolMessageType('FileTokenParams', (_message.Message,), {
+  'DESCRIPTOR' : _FILETOKENPARAMS,
+  '__module__' : 'unitedShieldSpace_pb2'
+  # @@protoc_insertion_point(class_scope:unitedshieldspace.FileTokenParams)
+  })
+_sym_db.RegisterMessage(FileTokenParams)
+
+FileTokenResponse = _reflection.GeneratedProtocolMessageType('FileTokenResponse', (_message.Message,), {
+  'DESCRIPTOR' : _FILETOKENRESPONSE,
+  '__module__' : 'unitedShieldSpace_pb2'
+  # @@protoc_insertion_point(class_scope:unitedshieldspace.FileTokenResponse)
+  })
+_sym_db.RegisterMessage(FileTokenResponse)
+
+RequestedFileDetails = _reflection.GeneratedProtocolMessageType('RequestedFileDetails', (_message.Message,), {
+  'DESCRIPTOR' : _REQUESTEDFILEDETAILS,
+  '__module__' : 'unitedShieldSpace_pb2'
+  # @@protoc_insertion_point(class_scope:unitedshieldspace.RequestedFileDetails)
+  })
+_sym_db.RegisterMessage(RequestedFileDetails)
+
+RequestedFileSegments = _reflection.GeneratedProtocolMessageType('RequestedFileSegments', (_message.Message,), {
+  'DESCRIPTOR' : _REQUESTEDFILESEGMENTS,
+  '__module__' : 'unitedShieldSpace_pb2'
+  # @@protoc_insertion_point(class_scope:unitedshieldspace.RequestedFileSegments)
+  })
+_sym_db.RegisterMessage(RequestedFileSegments)
+
 
 
 _UNITEDSHIELDSPACE = _descriptor.ServiceDescriptor(
@@ -687,8 +892,8 @@ _UNITEDSHIELDSPACE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=881,
-  serialized_end=1502,
+  serialized_start=1171,
+  serialized_end=1983,
   methods=[
   _descriptor.MethodDescriptor(
     name='RegisterNewUser',
@@ -751,6 +956,24 @@ _UNITEDSHIELDSPACE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_ACLDETAILS,
     output_type=_ACLUPDATERESPONSE,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='GetFileToken',
+    full_name='unitedshieldspace.UnitedShieldSpace.GetFileToken',
+    index=7,
+    containing_service=None,
+    input_type=_FILETOKENPARAMS,
+    output_type=_FILETOKENRESPONSE,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='DownloadFile',
+    full_name='unitedshieldspace.UnitedShieldSpace.DownloadFile',
+    index=8,
+    containing_service=None,
+    input_type=_REQUESTEDFILEDETAILS,
+    output_type=_REQUESTEDFILESEGMENTS,
     serialized_options=None,
   ),
 ])

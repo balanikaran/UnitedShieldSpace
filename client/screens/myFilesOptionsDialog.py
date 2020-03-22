@@ -5,7 +5,7 @@ from grpc import StatusCode
 
 from client.utils.windowUtils import centerWindow
 from client.screens.stickyDialog import StickyDialog
-from client.communication.fileOperations import UpdateFileACL
+from client.communication.fileOperations import UpdateFileACL, DownloadFile
 from client.utils.textUtils import validateEmail
 from client.screens.genericDialog import GenericDialog
 
@@ -43,6 +43,29 @@ class MyFilesOptionsDialog(tk.Toplevel):
 
     def downloadFile(self):
         print("Download")
+        self.dqueue = Queue()
+        self.remove()
+        self.waitDialog = StickyDialog(self, message="Downloading! Please wait...")
+        userFileDownloadThread = DownloadFile(queue=self.dqueue, owner=self.fileDetails[0], name=self.fileDetails[1])
+        userFileDownloadThread.start()
+        self.checkDownloadQueue()
+
+    def checkDownloadQueue(self):
+        if not self.dqueue.empty():
+            self.downloadResponse = self.dqueue.get()
+            self.waitDialog.destroy()
+            print(self.downloadResponse)
+            self.afterDownloadResponse()
+        else:
+            self.root.after(100, self.checkDownloadQueue)
+
+    def afterDownloadResponse(self):
+        if self.downloadResponse == StatusCode.OK:
+            GenericDialog(self.root, title="Success!", message="File saved to Desktop")
+        elif self.downloadResponse == StatusCode.INTERNAL:
+            GenericDialog(self.root, title="Error!", message="Internal server error!")
+        else:
+            GenericDialog(self.root, title="Error!", message="Some other error occurred!")
 
     def revokeAccess(self):
         print("revoking")
@@ -89,4 +112,4 @@ class MyFilesOptionsDialog(tk.Toplevel):
         elif self.aclUpdateResponse == StatusCode.INTERNAL:
             GenericDialog(self.root, title="Error!", message="Internal server error!")
         else:
-            GenericDialog(self.root, title="Error!", message="Error code: " + self.aclUpdateResponse)
+            GenericDialog(self.root, title="Error!", message="Some other error occurred!")

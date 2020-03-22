@@ -29,7 +29,6 @@ class UssMenu(tk.Menu):
         # this is the second menu option of menubar
         # Name = Account
         accountMenu = tk.Menu(self)
-        accountMenu.add_command(label="Delete Account")
         accountMenu.add_command(label="Sign Out", command=self.signOut)
 
         # this is the third menu option of menubar
@@ -113,7 +112,7 @@ class UssMenu(tk.Menu):
         elif self.uploadStatusResponse == StatusCode.OK:
             GenericDialog(self.root, title="Success!", message="File Uploaded Successfully!\nPlease refresh!")
         else:
-            GenericDialog(self.root, title="Error!", message="Error code: " + self.uploadStatusResponse)
+            GenericDialog(self.root, title="Error!", message="Some other error occurred!")
         self.enableMenuBar()
 
     def refreshMasterFrame(self):

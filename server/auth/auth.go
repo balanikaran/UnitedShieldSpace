@@ -85,7 +85,15 @@ func Login(userCredentials *unitedShieldSpace.UserCredentials) (*unitedShieldSpa
 }
 
 type tokenClaims struct {
-	uid   string `json:"uid"`
+	UID string `json:"uid"`
+	jwt.StandardClaims
+}
+
+type fileClaims struct {
+	Owner     string `json:"owner" bson:"owner"`
+	Requestor string `json:"requestor" bson:"requestor"`
+	Salt      int    `json:"salt" bson:"salt"`
+	Name      string `json:"name" bson:"name`
 	jwt.StandardClaims
 }
 
@@ -131,7 +139,7 @@ func createRefTokenWithParams(uid string, passwordHash string) (string, error) {
 	return tokenString, nil
 }
 
-// VerifyAccessToken - 
+// VerifyAccessToken -
 func VerifyAccessToken(tokenString string) codes.Code {
 	signingKey := utils.GetEnvAsString("SERVER_ACC_TOKEN_KEY", "")
 	claims := &tokenClaims{}
@@ -158,7 +166,7 @@ func VerifyAccessToken(tokenString string) codes.Code {
 	return codes.OK
 }
 
-// VerifyRefreshToken - 
+// VerifyRefreshToken -
 func VerifyRefreshToken(tokenString string, uid string) codes.Code {
 	signingKey := utils.GetEnvAsString("SERVER_REF_TOKEN_KEY", "")
 
@@ -193,12 +201,12 @@ func VerifyRefreshToken(tokenString string, uid string) codes.Code {
 	return codes.OK
 }
 
-// RenewTokens - 
+// RenewTokens -
 func RenewTokens(uid string) (*unitedShieldSpace.NewTokens, error) {
 	user, err := db.FetchUserByUID(uid)
 	if err != nil {
 		return &unitedShieldSpace.NewTokens{
-			AccessToken: "",
+			AccessToken:  "",
 			RefreshToken: "",
 		}, status.Error(codes.Internal, "internal server err")
 	}
@@ -206,7 +214,7 @@ func RenewTokens(uid string) (*unitedShieldSpace.NewTokens, error) {
 	accessTokenString, err := createAccTokenWithParams(user.ID)
 	if err != nil {
 		return &unitedShieldSpace.NewTokens{
-			AccessToken: "",
+			AccessToken:  "",
 			RefreshToken: "",
 		}, status.Error(codes.Internal, "internal server err")
 	}
@@ -214,13 +222,72 @@ func RenewTokens(uid string) (*unitedShieldSpace.NewTokens, error) {
 	refreshTokenString, err := createRefTokenWithParams(user.ID, user.Password)
 	if err != nil {
 		return &unitedShieldSpace.NewTokens{
-			AccessToken: "",
+			AccessToken:  "",
 			RefreshToken: "",
 		}, status.Error(codes.Internal, "internal server err")
 	}
 
 	return &unitedShieldSpace.NewTokens{
-		AccessToken: accessTokenString,
+		AccessToken:  accessTokenString,
 		RefreshToken: refreshTokenString,
 	}, nil
+}
+
+// GetFileTokenWithParams -
+func GetFileTokenWithParams(owner string, requestor string, salt int, name string) (string, error) {
+	signingKey := utils.GetEnvAsString("SERVER_FILE_TOKEN_KEY", "")
+
+	claims := fileClaims{
+		owner,
+		requestor,
+		salt,
+		name,
+		jwt.StandardClaims{
+			ExpiresAt: time.Now().Unix() + 600,
+			Issuer:    "USS",
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	tokenString, err := token.SignedString([]byte(signingKey))
+	if err != nil {
+		return "", err
+	}
+	ussLogger.Println("token: ", tokenString)
+	return tokenString, nil
+}
+
+// VerifyFileToken -
+func VerifyFileToken(tokenString string, salt int) codes.Code {
+	ussLogger.Println("verifying file token")
+
+	signingKey := utils.GetEnvAsString("SERVER_FILE_TOKEN_KEY", "")
+	claims := &fileClaims{}
+
+	// parse the token string
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+		return []byte(signingKey), nil
+	})
+
+	if err != nil {
+		ussLogger.Println("acc token parsing error - ", err)
+		if err == jwt.ErrSignatureInvalid {
+			ussLogger.Println("ref token signature error - ", err)
+			return codes.Unauthenticated
+		}
+		return codes.Unauthenticated
+	}
+
+	if !token.Valid {
+		ussLogger.Println("invalid ref token - ")
+		return codes.Unauthenticated
+	}
+
+	ussLogger.Println("salt:", salt, "claimSalt:", claims.Salt)
+	if !(salt == claims.Salt) {
+		return codes.Unauthenticated
+	}
+
+	return codes.OK
 }

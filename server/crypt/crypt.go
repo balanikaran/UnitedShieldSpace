@@ -160,7 +160,7 @@ func DecryptClientFile(source string) bool {
 	}
 
 	// creating decrypted file
-	dFile, err := os.Create(source + ".txt1")
+	dFile, err := os.Create(source + ".txt")
 	if err != nil {
 		ussLogger.Println("error creating decrypted file - ", err)
 		return false

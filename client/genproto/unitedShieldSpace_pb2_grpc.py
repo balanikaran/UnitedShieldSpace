@@ -49,6 +49,16 @@ class UnitedShieldSpaceStub(object):
         request_serializer=unitedShieldSpace__pb2.ACLDetails.SerializeToString,
         response_deserializer=unitedShieldSpace__pb2.ACLUpdateResponse.FromString,
         )
+    self.GetFileToken = channel.unary_unary(
+        '/unitedshieldspace.UnitedShieldSpace/GetFileToken',
+        request_serializer=unitedShieldSpace__pb2.FileTokenParams.SerializeToString,
+        response_deserializer=unitedShieldSpace__pb2.FileTokenResponse.FromString,
+        )
+    self.DownloadFile = channel.unary_stream(
+        '/unitedshieldspace.UnitedShieldSpace/DownloadFile',
+        request_serializer=unitedShieldSpace__pb2.RequestedFileDetails.SerializeToString,
+        response_deserializer=unitedShieldSpace__pb2.RequestedFileSegments.FromString,
+        )
 
 
 class UnitedShieldSpaceServicer(object):
@@ -104,6 +114,20 @@ class UnitedShieldSpaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def GetFileToken(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def DownloadFile(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_UnitedShieldSpaceServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -141,6 +165,16 @@ def add_UnitedShieldSpaceServicer_to_server(servicer, server):
           servicer.UpdateACL,
           request_deserializer=unitedShieldSpace__pb2.ACLDetails.FromString,
           response_serializer=unitedShieldSpace__pb2.ACLUpdateResponse.SerializeToString,
+      ),
+      'GetFileToken': grpc.unary_unary_rpc_method_handler(
+          servicer.GetFileToken,
+          request_deserializer=unitedShieldSpace__pb2.FileTokenParams.FromString,
+          response_serializer=unitedShieldSpace__pb2.FileTokenResponse.SerializeToString,
+      ),
+      'DownloadFile': grpc.unary_stream_rpc_method_handler(
+          servicer.DownloadFile,
+          request_deserializer=unitedShieldSpace__pb2.RequestedFileDetails.FromString,
+          response_serializer=unitedShieldSpace__pb2.RequestedFileSegments.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

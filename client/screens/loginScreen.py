@@ -104,7 +104,7 @@ class LoginScreen:
         elif self.loginResponse == StatusCode.UNAVAILABLE:
             GenericDialog(self.root, title="Internal Error", message="Server not available!")
         else:
-            GenericDialog(self.root, title="Unknown Error", message="Error code: " + self.loginResponse)
+            GenericDialog(self.root, title="Unknown Error", message="Some other error occurred!")
 
     def saveUserInfoInitiator(self):
         self.waitDialog = StickyDialog(self.root, message="Initializing...\nPlease wait!")

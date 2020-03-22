@@ -10,6 +10,8 @@ service UnitedShieldSpace {
     rpc ListUserFiles(UserDetails) returns (stream FileDetails);
     rpc ListSharedWithMeFiles(UserDetails) returns (stream ExtFileDetails);
     rpc UpdateACL(ACLDetails) returns (ACLUpdateResponse);
+    rpc GetFileToken(FileTokenParams) returns (FileTokenResponse);
+    rpc DownloadFile(RequestedFileDetails) returns (stream RequestedFileSegments);
 }
 
 message NewUserDetails {
@@ -83,4 +85,27 @@ message ACLDetails {
 
 message ACLUpdateResponse {
     bool ACLUpdateStatus = 1;
+}
+
+message FileTokenParams {
+    string owner = 1;
+    string requestor = 2;
+    string name = 3;
+    string accessToken = 4;
+}
+
+message FileTokenResponse {
+    string fileToken = 1;
+}
+
+message RequestedFileDetails {
+    string accessToken = 1;
+    string fileToken = 2;
+    string name = 3;
+    string owner = 4;
+    string requestor = 5;
+}
+
+message RequestedFileSegments {
+    bytes fileSegmentData = 1;
 }

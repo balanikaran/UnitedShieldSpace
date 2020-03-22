@@ -309,3 +309,112 @@ class UpdateFileACL(Thread):
             else:
                 print("some other error occurred with old tokens...", rpcError.code())
                 self.queue.put(rpcError.code())
+
+
+class DownloadFile(Thread):
+    def __init__(self, queue: Queue, owner: str, name: str, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.queue = queue
+        self.owner = owner
+        self.name = name
+
+        self.fileTokenString = ""
+        self.fileTokenResponse = None
+
+        self.user = GetUser.get()
+        (self.accessToken, self.refreshToken) = GetTokens().get()
+
+    def run(self):
+        print("run was called...")
+        self.getFileToken()
+
+    def getFileToken(self):
+        channel = grpc.insecure_channel(serverAddress + ":" + serverPort)
+        stub = unitedShieldSpace.UnitedShieldSpaceStub(channel)
+
+        # get the file token
+        try:
+            print("trying to get the file token for download with old access tokens")
+
+            self.fileTokenResponse = stub.GetFileToken(
+                ussPb.FileTokenParams(accessToken=self.accessToken, owner=self.owner, name=self.name,
+                                      requestor=self.user.email))
+            print(self.fileTokenResponse)
+
+            print("file token received")
+
+            self.downloadFile()
+
+        except grpc.RpcError as rpcError:
+            print("error getting file token with old access token")
+            print(rpcError.code())
+            if rpcError.code() == StatusCode.UNAUTHENTICATED:
+                print("invalid access token")
+
+                try:
+                    print("trying to get new tokens...")
+                    newTokensResponse = stub.GetNewTokens(
+                        ussPb.RefreshTokenDetails(uid=self.user.userId, refreshToken=self.refreshToken))
+                    print("new tokens :", newTokensResponse)
+                    if UpdateTokens().update(newTokensResponse.accessToken, newTokensResponse.refreshToken):
+                        self.accessToken = newTokensResponse.accessToken
+                        self.refreshToken = newTokensResponse.refreshToken
+
+                        try:
+
+                            self.fileTokenResponse = stub.GetFileToken(
+                                ussPb.FileTokenParams(accessToken=self.accessToken, owner=self.owner, name=self.name,
+                                                      requestor=self.user.email))
+                            print(self.fileTokenResponse)
+
+                            print("file token recieved")
+
+                            self.downloadFile()
+
+                        except grpc.RpcError as rpcError:
+                            print("error occurred with new tokens...")
+                            print(rpcError.code())
+                            self.queue.put(rpcError.code())
+                    else:
+                        print("here unable to update tokens")
+                        self.queue.put(StatusCode.UNAUTHENTICATED)
+
+                except grpc.RpcError as rpcError:
+                    print("exception occurred with ref token...")
+                    print(rpcError.code())
+
+                    if rpcError.code() == StatusCode.UNAUTHENTICATED:
+                        print("invalid ref token, perform signout...")
+                        self.queue.put(StatusCode.UNAUTHENTICATED)
+                    else:
+                        print("some other error occured while trying to get new tokens, perform signout...")
+                        self.queue.put(rpcError.code())
+
+            else:
+                print(rpcError.code())
+                print("unable to get new tokens - try again")
+
+    def downloadFile(self):
+
+        channel = grpc.insecure_channel(serverAddress + ":" + serverPort)
+        stub = unitedShieldSpace.UnitedShieldSpaceStub(channel)
+
+        try:
+            downloadFileResponse = stub.DownloadFile(
+                ussPb.RequestedFileDetails(accessToken=self.accessToken, fileToken=self.fileTokenResponse.fileToken,
+                                           name=self.name, owner=self.owner, requestor=self.user.email))
+
+            desktopPath = os.path.normpath(os.path.expanduser("~/Desktop"))
+
+            print("file response - ", downloadFileResponse)
+
+            with open(desktopPath + "/" + self.name, "wb") as file:
+                for response in downloadFileResponse:
+                    print(response)
+                    file.write(response.fileSegmentData)
+
+            self.queue.put(StatusCode.OK)
+
+        except grpc.RpcError as rpcError:
+            print(rpcError.code())
+            self.queue.put(rpcError.code())

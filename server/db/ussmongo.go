@@ -343,3 +343,111 @@ func UpdateFileACL(aclDetails *unitedShieldSpace.ACLDetails) (*unitedShieldSpace
 	}, nil
 
 }
+
+// GetFileSalt - 
+func GetFileSalt(owner string, name string, requestor string) (int, error) {
+	// get files database collection
+	filesDb, err := getFilesDbCollection()
+	if err != nil {
+		ussLogger.Println("Unable to get files db collection - ", err)
+		return -1, status.Error(codes.Internal, "internal server error")
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	type saltField struct {
+		Salt int `json:"salt" bson:"salt"`
+	}
+
+	if owner == requestor {
+		// means user wants to download his own file
+		saltDoc := &saltField{}
+		err := filesDb.FindOne(ctx, bson.M{
+			"owner": owner,
+			"name":  name,
+		}, options.FindOne().SetProjection(bson.M{
+			"salt": 1,
+		})).Decode(&saltDoc)
+		if err != nil {
+			return -1, status.Error(codes.Internal, "internal server error")
+		}
+
+		ussLogger.Println(saltDoc)
+		return saltDoc.Salt, nil
+	}
+
+	ussLogger.Println("owner not requestor - ", requestor)
+	// means requestor is not owner of file
+	saltDoc := &saltField{}
+	err = filesDb.FindOne(ctx, bson.M{
+		"owner":     owner,
+		"name":      name,
+		"ACL.email": requestor,
+	}, options.FindOne().SetProjection(bson.M{
+		"ACL": 1,
+	})).Decode(&saltDoc)
+	if err != nil {
+		return -1, status.Error(codes.Internal, "internal server error")
+	}
+
+	ussLogger.Println(saltDoc)
+	return saltDoc.Salt, nil
+
+}
+
+// GetFileSaltAndIncrease - 
+func GetFileSaltAndIncrease(owner string, name string, requestor string) (int, error) {
+
+	// get files database collection
+	filesDb, err := getFilesDbCollection()
+	if err != nil {
+		ussLogger.Println("Unable to get files db collection - ", err)
+		return -1, status.Error(codes.Internal, "internal server error")
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	type saltField struct {
+		Salt int `json:"salt" bson:"salt"`
+	}
+
+	if owner == requestor {
+		// means owner is downloading his own file
+		saltDoc := &saltField{}
+		err := filesDb.FindOneAndUpdate(ctx, bson.M{
+			"owner": owner,
+			"name":  name,
+		}, bson.M{
+			"$inc": bson.M{"salt": 1},
+		}, options.FindOneAndUpdate().SetProjection(bson.M{
+			"salt": 1,
+		})).Decode(&saltDoc)
+		if err != nil {
+			return -1, status.Error(codes.Internal, "internal server error")
+		}
+
+		ussLogger.Println(saltDoc)
+		return saltDoc.Salt, nil
+	}
+
+	// means requestor is not owner of file
+	saltDoc := &saltField{}
+	err = filesDb.FindOneAndUpdate(ctx, bson.M{
+		"owner":     owner,
+		"name":      name,
+		"ACL.email": requestor,
+	}, bson.M{
+		"$inc": bson.M{"ACL.$.salt": 1},
+	}, options.FindOneAndUpdate().SetProjection(bson.M{
+		"ACL.salt": 1,
+	})).Decode(&saltDoc)
+	if err != nil {
+		return -1, status.Error(codes.Internal, "internal server error")
+	}
+
+	ussLogger.Println(saltDoc)
+	return saltDoc.Salt, nil
+
+}
