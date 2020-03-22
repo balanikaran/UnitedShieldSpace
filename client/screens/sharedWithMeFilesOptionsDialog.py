@@ -57,7 +57,7 @@ class SharedWithMeFilesOptionsDialog(tk.Toplevel):
     def checkDownloadQueue(self):
         if not self.dqueue.empty():
             self.downloadResponse = self.dqueue.get()
-            self.waitDialog.destroy()
+            self.waitDialog.remove()
             print(self.downloadResponse)
             self.afterDownloadResponse()
         else:

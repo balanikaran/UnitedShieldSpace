@@ -66,7 +66,7 @@ class MyFilesOptionsDialog(tk.Toplevel):
     def checkDownloadQueue(self):
         if not self.dqueue.empty():
             self.downloadResponse = self.dqueue.get()
-            self.waitDialog.destroy()
+            self.waitDialog.remove()
             print(self.downloadResponse)
             self.afterDownloadResponse()
         else:
@@ -111,7 +111,7 @@ class MyFilesOptionsDialog(tk.Toplevel):
     def checkACLUpdateQueue(self):
         if not self.queue.empty():
             self.aclUpdateResponse = self.queue.get()
-            self.waitDialog.destroy()
+            self.waitDialog.remove()
             print(self.aclUpdateResponse)
             self.afterACLUpdateResponse()
         else:

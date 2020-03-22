@@ -44,6 +44,7 @@ class UssMenu(tk.Menu):
     def signOut(self):
         result = RemoveUserLoginInfo().remove()
         if result:
+            self.masterFrame.grab_release()
             self.masterFrame.destroy()
             loginScreen.LoginScreen(self.root)
         else:
