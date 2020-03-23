@@ -13,7 +13,7 @@ Monolithic Architecture based Public Cloud Storage Service for encrypted text fi
 <img src="/githubGraphics/firebase-file.png"/>
 
 ## Watch a Demo
-[![Watch the video](https://gph.is/g/4wgxKN2)](https://youtu.be/5sNnQHXtfUA)
+[![Watch the video](https://media.giphy.com/media/XBdaS9VD83Pk63s5DM/giphy.gif)](https://youtu.be/5sNnQHXtfUA)
 
 ## Technologies Used
 - Python3
@@ -52,10 +52,10 @@ This is not production ready, but can prove a very good resource to understand c
  - University Professors
 
 ## About the developer (ME)
-Checkout my website: [Karan Balani](krnblni.github.io)
+Checkout my website: [Karan Balani](https://krnblni.github.io)
 Connect with me on LinkedIn ❤️
 
 ## License
 GPLv3 (General Public License 3.0) 
 
-GPL © [Karan Balani](krnblni.github.io)
+GPL © [Karan Balani](https://krnblni.github.io)
