@@ -1,4 +1,5 @@
 # United Shield Space - Desktop App <img src="/githubGraphics/logo.png" align="right" width="266" height="131" />
+### Google Drive on steroids for text files! 😎
 Monolithic Architecture based Public Cloud Storage Service for encrypted text file storage with Server side written in GoLang and Client side GUI written in Python. Client and Server communicate over gRPC Services.
 
 ## Screenshots
