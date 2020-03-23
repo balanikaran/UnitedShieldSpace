@@ -21,6 +21,7 @@ import (
 var ussLogger = logger.GetInstance()
 
 func getMongoDbURI() string {
+	// update this url with your own database cluster url
 	const mongoDbURI = "mongodb+srv://%s:%s@unitedshieldspace-db-cluster-jv8tf.mongodb.net/test?retryWrites=true&w=majority"
 	return fmt.Sprintf(mongoDbURI, utils.GetEnvAsString("MONGO_DB_USERNAME", ""), utils.GetEnvAsString("MONGO_DB_PASSWORD", ""))
 }

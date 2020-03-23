@@ -87,7 +87,7 @@ class MyFilesOptionsDialog(tk.Toplevel):
         toEmail = self.emailEntry.get()
         self.remove()
         if validateEmail(email=toEmail):
-            self.waitDialog = StickyDialog(self, message="Granting! Please wait...")
+            self.waitDialog = StickyDialog(self, message="Revoking! Please wait...")
             updateAclGrantThread = UpdateFileACL(queue=self.queue, owner=self.fileDetails[0], name=self.fileDetails[1],
                                                  grant=False, toEmail=toEmail)
             updateAclGrantThread.start()
